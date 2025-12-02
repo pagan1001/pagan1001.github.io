@@ -1,326 +1,617 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文章详情 | 我的博客</title>
-    
-    <!-- 👇 保持外部 CDN 引用（暂不替换本地） -->
+    <title>Pagan个人博客 | Github.io</title>
+    <!-- ===== 新增：自定义Icon（替换为你的路径） ===== -->
+    <link rel="icon" href="./icons/favicon.ico" type="image/x-icon">
+    <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Font Awesome 图标 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
-    <!-- 网站 Icon（可先保留，后续替换本地） -->
-    <link rel="icon" href="./assets/icons/favicon.ico" type="image/x-icon">
+    <!-- 自定义配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            100: '#333333',
+                            200: '#282828',
+                            300: '#1E1E1E',
+                            400: '#121212'
+                        },
+                        accent: '#8B5CF6', // 紫色强调色（可自定义：替换为#06b6d4青色/#ec4899粉色等）
+                        accentLight: '#A78BFA'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.4s ease-out',
+                        'pulse-light': 'pulseLight 2s infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        pulseLight: {
+                            '0%, 100%': { boxShadow: '0 0 0 0 rgba(139, 92, 246, 0.4)' },
+                            '50%': { boxShadow: '0 0 0 8px rgba(139, 92, 246, 0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            /* 自定义工具类 */
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .card-hover {
+                @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-accent/20 hover:border-accent/50;
+            }
+            .btn-primary {
+                @apply bg-accent text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-accentLight hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-accent/50;
+            }
+            .nav-link {
+                @apply relative px-3 py-2 rounded-md transition-all duration-300 hover:text-accentLight hover:bg-dark-100/50;
+            }
+            .nav-link::after {
+                @apply absolute bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-accent rounded-full transition-all duration-300;
+                content: '';
+            }
+            .nav-link:hover::after {
+                @apply w-4/5;
+            }
+            .category-tag {
+                @apply px-4 py-1 rounded-full text-sm transition-all duration-300 cursor-pointer;
+            }
+            .category-tag.active {
+                @apply bg-accent text-white;
+            }
+            .category-tag.inactive {
+                @apply bg-dark-200 text-gray-400 hover:bg-dark-100 hover:text-white;
+            }
+        }
 
-    <!-- 👇 完全复用 index 的自定义样式（保证 UI 一致） -->
-    <style>
-        :root {
-            --dark-900: #121212;
-            --dark-800: #1e1e1e;
-            --dark-200: #2d2d2d;
-            --dark-100: #333333;
-            --accent: #8B5CF6;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-        }
-        .bg-dark-900 { background-color: var(--dark-900); }
-        .bg-dark-800 { background-color: var(--dark-800); }
-        .bg-dark-200 { background-color: var(--dark-200); }
-        .bg-dark-100 { background-color: var(--dark-100); }
-        .text-accent { color: var(--accent); }
-        .border-accent { border-color: var(--accent); }
-        .btn-primary {
-            background-color: var(--accent);
-            color: white;
-            border-radius: 6px;
-            transition: all 0.3s;
-        }
-        .btn-primary:hover {
-            background-color: #7c3aed;
-            transform: translateY(-2px);
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.2);
-        }
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-in-out forwards;
-            opacity: 0;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+        /* 全局样式 */
+        body {
+            background-color: theme('colors.dark.400');
+            color: theme('colors.gray.200');
+            scroll-behavior: smooth;
         }
 
-        /* MD 内容适配 index 的 UI 样式（关键：和主页风格统一） */
-        .article-content {
-            max-width: 1200px; /* 和 index 的容器宽度一致 */
-            margin: 0 auto;
-            padding: 0 20px;
-            line-height: 1.8;
-            color: var(--gray-400); /* 和 index 文本色一致 */
+        /* 模态框遮罩 */
+        .modal-overlay {
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
-        /* MD 标题样式：匹配 index 的卡片标题 */
-        .article-content h1 { 
-            font-size: 2rem; 
-            font-weight: 600; 
-            color: white; /* 和 index 卡片标题色一致 */
-            margin: 2rem 0 1rem;
-            border-bottom: 1px solid var(--dark-100);
-            padding-bottom: 0.5rem;
+
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
-        .article-content h2 { 
-            font-size: 1.5rem; 
-            font-weight: 600; 
-            color: white;
-            margin: 1.5rem 0 0.8rem;
+        ::-webkit-scrollbar-track {
+            background: theme('colors.dark.300');
         }
-        .article-content h3 { 
-            font-size: 1.2rem; 
-            font-weight: 600; 
-            color: white;
-            margin: 1.2rem 0 0.6rem;
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.dark.100');
+            border-radius: 4px;
         }
-        /* MD 文本/段落：匹配 index 的卡片简介 */
-        .article-content p { 
-            margin: 0.8rem 0; 
-            color: var(--gray-400);
-        }
-        /* MD 代码块：匹配 index 的暗黑风格 */
-        .article-content pre { 
-            background: var(--dark-200); 
-            padding: 1rem; 
-            border-radius: 8px; 
-            overflow-x: auto; 
-            margin: 1rem 0;
-            border: 1px solid var(--dark-100);
-        }
-        .article-content code { 
-            background: var(--dark-100); 
-            padding: 0.2rem 0.4rem; 
-            border-radius: 4px; 
-            font-family: monospace;
-            color: var(--accent); /* 代码色匹配 index 的强调色 */
-        }
-        .article-content pre code { 
-            background: transparent; 
-            padding: 0;
-            color: var(--gray-400);
-        }
-        /* MD 图片：适配 index 的卡片图片风格 */
-        .article-content img { 
-            max-width: 100%; 
-            border-radius: 8px; 
-            margin: 1rem 0;
-            border: 1px solid var(--dark-100);
-        }
-        /* MD 表格/引用：匹配暗黑风格 */
-        .article-content table { 
-            border-collapse: collapse; 
-            width: 100%; 
-            margin: 1rem 0;
-            background: var(--dark-200);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .article-content table th, td { 
-            border: 1px solid var(--dark-100); 
-            padding: 0.8rem;
-            color: var(--gray-400);
-        }
-        .article-content table th { 
-            background: var(--dark-100); 
-            color: white;
-        }
-        .article-content blockquote { 
-            border-left: 4px solid var(--accent); 
-            padding-left: 1rem; 
-            margin: 1rem 0; 
-            color: var(--gray-500);
-            background: var(--dark-200);
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.accent/60');
         }
     </style>
 </head>
 
-<!-- 完全复用 index 的 body 结构 + 暗黑背景 -->
-<body class="bg-dark-900 text-white min-h-screen">
-    <!-- 100% 复刻 index 的导航栏（UI 完全一致） -->
-    <nav class="bg-dark-800 py-4 px-6 sticky top-0 z-50 animate-fade-in">
+<body class="min-h-screen">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6 md:px-12">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="./index.html" class="text-xl font-bold text-accent">我的个人博客</a>
-            <!-- 复用 index 的导航菜单 -->
-            <div class="hidden md:flex gap-6">
-                <a href="./index.html" class="text-gray-400 hover:text-accent transition-colors">首页</a>
-                <a href="./index.html?category=tech" class="text-gray-400 hover:text-accent transition-colors">技术专栏</a>
-                <a href="./index.html?category=life" class="text-gray-400 hover:text-accent transition-colors">生活感悟</a>
-                <a href="./index.html?category=notes" class="text-gray-400 hover:text-accent transition-colors">学习笔记</a>
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2 text-xl font-bold text-white">
+                <i class="fa-solid fa-feather-pointed text-accent animate-pulse-light"></i>
+                <span>MyBlog</span>
+            </a>
+
+            <!-- 桌面端导航 -->
+            <div class="hidden md:flex items-center gap-6">
+                <a href="#home" class="nav-link">首页</a>
+                <a href="#blogs" class="nav-link">博客</a>
+                <a href="#about" class="nav-link">关于我</a>
+                <!-- 【拓展备注1】新增顶部导航栏目：复制下面一行，修改href和文字即可新增导航项 -->
+                <!-- <a href="#XXX" class="nav-link">XXX栏目</a> -->
+                <a href="#" class="btn-primary">
+                    <i class="fa-solid fa-paper-plane mr-2"></i>联系我
+                </a>
             </div>
-            <!-- 移动端菜单按钮（复用 index） -->
-            <button class="md:hidden text-gray-400 hover:text-accent" id="mobileMenuBtn">
-                <i class="fa-solid fa-bars text-xl"></i>
+
+            <!-- 移动端汉堡菜单 -->
+            <button id="menuBtn" class="md:hidden text-white text-xl">
+                <i class="fa-solid fa-bars"></i>
             </button>
         </div>
-        <!-- 移动端菜单（复用 index） -->
-        <div class="md:hidden hidden bg-dark-200 mt-4 p-4 rounded-lg animate-fade-in" id="mobileMenu">
-            <div class="flex flex-col gap-3">
-                <a href="./index.html" class="text-gray-400 hover:text-accent transition-colors">首页</a>
-                <a href="./index.html?category=tech" class="text-gray-400 hover:text-accent transition-colors">技术专栏</a>
-                <a href="./index.html?category=life" class="text-gray-400 hover:text-accent transition-colors">生活感悟</a>
-                <a href="./index.html?category=notes" class="text-gray-400 hover:text-accent transition-colors">学习笔记</a>
+
+        <!-- 移动端菜单面板 -->
+        <div id="mobileMenu"
+            class="md:hidden hidden absolute top-full left-0 right-0 bg-dark-300/95 backdrop-blur-md border-t border-dark-100 animate-fade-in py-4 px-6">
+            <div class="flex flex-col gap-4">
+                <a href="#home" class="nav-link">首页</a>
+                <a href="#blogs" class="nav-link">博客</a>
+                <a href="#about" class="nav-link">关于我</a>
+                <!-- 【拓展备注2】移动端导航拓展：复制下面一行，修改href和文字即可新增移动端导航项 -->
+                <!-- <a href="#XXX" class="nav-link">XXX栏目</a> -->
+                <a href="#" class="btn-primary w-full text-center">
+                    <i class="fa-solid fa-paper-plane mr-2"></i>联系我
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- MD 内容区域（替换 index 的博客卡片区域，布局对齐） -->
-    <main class="py-10 animate-fade-in">
-        <!-- 文章标题 + 元信息（样式匹配 index 的卡片元信息） -->
-        <div class="max-w-7xl mx-auto px-6 mb-8">
-            <h1 id="articleTitle" class="text-3xl font-bold text-white mb-4"></h1>
-            <div id="articleMeta" class="flex flex-wrap gap-4 text-gray-500 text-sm">
-                <span><i class="fa-solid fa-calendar mr-1"></i> <span id="publishDate"></span></span>
-                <span><i class="fa-solid fa-tag mr-1"></i> <span id="articleTag"></span></span>
-                <span><i class="fa-solid fa-eye mr-1"></i> <span id="viewCount"></span></span>
-                <span><i class="fa-solid fa-clock mr-1"></i> <span id="readTime"></span></span>
+    <!-- 英雄区 -->
+    <section id="home" class="pt-32 pb-20 px-6 md:px-12 animate-fade-in">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2 animate-slide-up">
+                <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold text-white leading-tight mb-4">
+                    探索技术与<span class="text-accent">生活</span>的边界
+                </h1>
+                <p class="text-gray-400 text-lg mb-8 max-w-xl">
+                    记录我的学习历程、技术思考和生活感悟，分享有价值的内容，与志同道合的你一起成长。
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#blogs" class="btn-primary text-lg">
+                        <i class="fa-solid fa-book-open mr-2"></i>浏览博客
+                    </a>
+                    <a href="#"
+                        class="border border-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:border-accent hover:text-accent hover:bg-dark-300 hover:scale-105 active:scale-95">
+                        <i class="fa-solid fa-github mr-2"></i>我的GitHub
+                    </a>
+                </div>
+                <!-- 社交图标 -->
+                <div class="mt-10 flex gap-4">
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-dark-300 flex items-center justify-center text-gray-400 transition-all duration-300 hover:bg-accent hover:text-white hover:scale-110">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-dark-300 flex items-center justify-center text-gray-400 transition-all duration-300 hover:bg-accent hover:text-white hover:scale-110">
+                        <i class="fa-brands fa-twitter"></i>
+                    </a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-dark-300 flex items-center justify-center text-gray-400 transition-all duration-300 hover:bg-accent hover:text-white hover:scale-110">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-dark-300 flex items-center justify-center text-gray-400 transition-all duration-300 hover:bg-accent hover:text-white hover:scale-110">
+                        <i class="fa-solid fa-envelope"></i>
+                    </a>
+                    <!-- 【拓展备注3】新增社交图标：复制上面一行，修改图标类名和href即可 -->
+                </div>
+            </div>
+            <div class="md:w-1/2 animate-slide-up" style="animation-delay: 0.2s">
+                <div class="relative">
+                    <div
+                        class="w-full h-80 md:h-96 bg-dark-300 rounded-2xl overflow-hidden shadow-2xl shadow-accent/10">
+                        <img src="https://picsum.photos/800/600?random=1" alt="博客封面"
+                            class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-all duration-500">
+                    </div>
+                    <!-- 装饰元素 -->
+                    <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-accent/20 rounded-xl blur-2xl"></div>
+                    <div class="absolute -top-4 -left-4 w-20 h-20 bg-accent/10 rounded-xl blur-xl"></div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <!-- MD 渲染内容（样式适配 index 的 UI） -->
-        <div id="articleContent" class="article-content"></div>
+    <!-- 博客列表（带栏目分类） -->
+    <section id="blogs" class="py-20 px-6 md:px-12 bg-dark-300/50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-10 animate-slide-up">
+                <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-bold text-white mb-4">我的博客文章</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    在这里记录我的技术探索、项目实践和生活思考，每一篇都是用心创作的内容
+                </p>
+                <div class="w-20 h-1 bg-accent mx-auto mt-6 rounded-full"></div>
+            </div>
 
-        <!-- 回到顶部按钮（复用 index 的样式） -->
-        <div class="max-w-7xl mx-auto px-6 mt-10 text-center">
-            <a href="#" class="btn-primary py-2 px-6 inline-block">
-                <i class="fa-solid fa-arrow-up mr-1"></i> 回到顶部
-            </a>
+            <!-- 栏目分类标签【核心拓展点】 -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12 animate-fade-in">
+                <!-- 全部栏目 -->
+                <div class="category-tag active" data-category="all">全部文章</div>
+                <!-- 技术专栏 -->
+                <div class="category-tag inactive" data-category="tech">技术专栏</div>
+                <!-- 学习笔记 -->
+                <div class="category-tag inactive" data-category="notes">学习笔记</div>
+                <!-- 生活感悟 -->
+                <div class="category-tag inactive" data-category="life">生活感悟</div>
+                <!-- 【拓展备注4】新增栏目标签：复制下面一行，修改data-category和文字即可 -->
+                <!-- <div class="category-tag inactive" data-category="XXX">XXX栏目</div> -->
+            </div>
+
+            <!-- 博客卡片网格 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="blogGrid">
+                <!-- 博客卡片 1 - 技术专栏【MD文章跳转示例】 -->
+                <div class="blog-card bg-dark-200 rounded-xl overflow-hidden border border-dark-100 card-hover animate-fade-in"
+                    data-category="tech" style="animation-delay: 0.1s">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=2" alt="JS 闭包"
+                            class="w-full h-full object-cover transition-all duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                            <span><i class="fa-solid fa-calendar mr-1"></i> 2025-11-28</span>
+                            <span><i class="fa-solid fa-tag mr-1"></i> JavaScript</span>
+                            <span><i class="fa-solid fa-eye mr-1"></i> 1.2k</span>
+                        </div>
+                        <h3
+                            class="text-xl font-semibold text-white mb-3 hover:text-accent transition-colors duration-300">
+                            JavaScript 高级特性实战：闭包与异步编程</h3>
+                        <p class="text-gray-400 mb-4 line-clamp-2">
+                            本文深入讲解 JavaScript 闭包的原理和应用场景，结合异步编程（Promise、async/await）实现实际业务场景的解决方案...
+                        </p>
+                        <!-- 【关键修改】跳转至MD解析页面，传递文章名称参数 -->
+                        <a href="./article-viewer.html?name=js-closure"
+                            class="read-more btn-primary py-1 px-4 text-sm inline-block">
+                            <i class="fa-solid fa-readme mr-1"></i> 阅读全文
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 博客卡片 2 - 技术专栏 -->
+                <div class="blog-card bg-dark-200 rounded-xl overflow-hidden border border-dark-100 card-hover animate-fade-in"
+                    data-category="tech" style="animation-delay: 0.2s">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=3" alt="Tailwind CSS"
+                            class="w-full h-full object-cover transition-all duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                            <span><i class="fa-solid fa-calendar mr-1"></i> 2025-11-20</span>
+                            <span><i class="fa-solid fa-tag mr-1"></i> CSS</span>
+                            <span><i class="fa-solid fa-eye mr-1"></i> 890</span>
+                        </div>
+                        <h3
+                            class="text-xl font-semibold text-white mb-3 hover:text-accent transition-colors duration-300">
+                            Tailwind CSS 从入门到精通：打造高效UI开发流程</h3>
+                        <p class="text-gray-400 mb-4 line-clamp-2">
+                            Tailwind CSS 作为实用优先的 CSS 框架，彻底改变了传统的样式开发方式。本文从基础语法到高级技巧，结合实战案例...
+                        </p>
+                        <!-- MD文章跳转 -->
+                        <a href="./article-viewer.html?name=tailwind-guide"
+                            class="read-more btn-primary py-1 px-4 text-sm inline-block">
+                            <i class="fa-solid fa-readme mr-1"></i> 阅读全文
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 博客卡片 3 - 学习笔记 -->
+                <div class="blog-card bg-dark-200 rounded-xl overflow-hidden border border-dark-100 card-hover animate-fade-in"
+                    data-category="notes" style="animation-delay: 0.3s">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=4" alt="性能优化"
+                            class="w-full h-full object-cover transition-all duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                            <span><i class="fa-solid fa-calendar mr-1"></i> 2025-11-10</span>
+                            <span><i class="fa-solid fa-tag mr-1"></i> 性能优化</span>
+                            <span><i class="fa-solid fa-eye mr-1"></i> 1.5k</span>
+                        </div>
+                        <h3
+                            class="text-xl font-semibold text-white mb-3 hover:text-accent transition-colors duration-300">
+                            前端性能优化实战：从加载速度到交互体验</h3>
+                        <p class="text-gray-400 mb-4 line-clamp-2">
+                            前端性能直接影响用户体验和网站转化率。本文分享我在实际项目中用到的性能优化技巧，包括资源加载优化、渲染性能提升...
+                        </p>
+                        <!-- MD文章跳转 -->
+                        <a href="./article-viewer.html?name=frontend-optimize"
+                            class="read-more btn-primary py-1 px-4 text-sm inline-block">
+                            <i class="fa-solid fa-readme mr-1"></i> 阅读全文
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 博客卡片 4 - 技术专栏 -->
+                <div class="blog-card bg-dark-200 rounded-xl overflow-hidden border border-dark-100 card-hover animate-fade-in"
+                    data-category="tech" style="animation-delay: 0.4s">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=5" alt="React 状态管理"
+                            class="w-full h-full object-cover transition-all duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                            <span><i class="fa-solid fa-calendar mr-1"></i> 2025-10-28</span>
+                            <span><i class="fa-solid fa-tag mr-1"></i> React</span>
+                            <span><i class="fa-solid fa-eye mr-1"></i> 1.1k</span>
+                        </div>
+                        <h3
+                            class="text-xl font-semibold text-white mb-3 hover:text-accent transition-colors duration-300">
+                            React 状态管理对比：Redux vs Context + useReducer</h3>
+                        <p class="text-gray-400 mb-4 line-clamp-2">
+                            React 状态管理一直是前端开发的核心话题。本文对比 Redux 和 React 内置的 Context + useReducer 方案...
+                        </p>
+                        <!-- MD文章跳转 -->
+                        <a href="./article-viewer.html?name=react-state"
+                            class="read-more btn-primary py-1 px-4 text-sm inline-block">
+                            <i class="fa-solid fa-readme mr-1"></i> 阅读全文
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 博客卡片 5 - 学习笔记 -->
+                <div class="blog-card bg-dark-200 rounded-xl overflow-hidden border border-dark-100 card-hover animate-fade-in"
+                    data-category="notes" style="animation-delay: 0.5s">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=6" alt="TypeScript"
+                            class="w-full h-full object-cover transition-all duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                            <span><i class="fa-solid fa-calendar mr-1"></i> 2025-10-15</span>
+                            <span><i class="fa-solid fa-tag mr-1"></i> TypeScript</span>
+                            <span><i class="fa-solid fa-eye mr-1"></i> 950</span>
+                        </div>
+                        <h3
+                            class="text-xl font-semibold text-white mb-3 hover:text-accent transition-colors duration-300">
+                            TypeScript 实战指南：从入门到类型体操</h3>
+                        <p class="text-gray-400 mb-4 line-clamp-2">
+                            TypeScript 已成为前端开发的标配，本文从基础类型定义到高级类型体操，结合实际项目案例，讲解如何用 TypeScript...
+                        </p>
+                        <!-- MD文章跳转 -->
+                        <a href="./article-viewer.html?name=typescript-guide"
+                            class="read-more btn-primary py-1 px-4 text-sm inline-block">
+                            <i class="fa-solid fa-readme mr-1"></i> 阅读全文
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 博客卡片 6 - 生活感悟 -->
+                <div class="blog-card bg-dark-200 rounded-xl overflow-hidden border border-dark-100 card-hover animate-fade-in"
+                    data-category="life" style="animation-delay: 0.6s">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=7" alt="GitHub Pages"
+                            class="w-full h-full object-cover transition-all duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                            <span><i class="fa-solid fa-calendar mr-1"></i> 2025-10-01</span>
+                            <span><i class="fa-solid fa-tag mr-1"></i> 工具教程</span>
+                            <span><i class="fa-solid fa-eye mr-1"></i> 2.1k</span>
+                        </div>
+                        <h3
+                            class="text-xl font-semibold text-white mb-3 hover:text-accent transition-colors duration-300">
+                            从零搭建个人博客：GitHub Pages + 自定义域名</h3>
+                        <p class="text-gray-400 mb-4 line-clamp-2">
+                            本文详细讲解如何利用 GitHub Pages 搭建免费的个人博客，包括仓库配置、静态页面部署、自定义域名解析...
+                        </p>
+                        <!-- MD文章跳转 -->
+                        <a href="./article-viewer.html?name=github-blog"
+                            class="read-more btn-primary py-1 px-4 text-sm inline-block">
+                            <i class="fa-solid fa-readme mr-1"></i> 阅读全文
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 【拓展备注6】新增博客卡片：复制上面任意一个卡片，修改以下内容即可 -->
+                <!-- 1. data-category：关联对应的栏目标签 -->
+                <!-- 2. img src：文章封面图 -->
+                <!-- 3. 日期/标签/阅读量 -->
+                <!-- 4. 标题和简介 -->
+                <!-- 5. a标签href：改为 ./article-viewer.html?name=你的MD文件名（不含.md） -->
+            </div>
+
+            <!-- 加载更多按钮 -->
+            <div class="text-center mt-12 animate-fade-in">
+                <button class="btn-primary text-lg px-8 py-3">
+                    <i class="fa-solid fa-refresh mr-2"></i>加载更多
+                </button>
+            </div>
         </div>
-    </main>
+    </section>
 
-    <!-- 复刻 index 的页脚（UI 完全一致） -->
-    <footer class="bg-dark-800 py-6 mt-10 animate-fade-in">
-        <div class="max-w-7xl mx-auto px-6 text-center text-gray-500">
-            <p>© 2025 我的个人博客 | 基于 Markdown 构建</p>
-            <p class="mt-2">
-                <a href="#" class="text-accent hover:underline">GitHub</a> · 
-                <a href="#" class="text-accent hover:underline">Gitee</a> · 
-                <a href="#" class="text-accent hover:underline">关于我</a>
-            </p>
+    <!-- 关于我 -->
+    <section id="about" class="py-20 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 animate-slide-up">
+                <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-bold text-white mb-4">关于我</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    一个热爱技术的开发者，专注前端领域，喜欢分享和探索新技术
+                </p>
+                <div class="w-20 h-1 bg-accent mx-auto mt-6 rounded-full"></div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                <div class="md:w-1/3 animate-slide-up" style="animation-delay: 0.1s">
+                    <div class="relative">
+                        <div
+                            class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-accent/30 shadow-lg shadow-accent/10">
+                            <img src="https://picsum.photos/400/400?random=8" alt="个人头像"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <!-- 装饰元素 -->
+                        <div class="absolute -bottom-4 -right-4 w-20 h-20 bg-accent/20 rounded-xl blur-2xl"></div>
+                    </div>
+                </div>
+
+                <div class="md:w-2/3 animate-slide-up" style="animation-delay: 0.2s">
+                    <h3 class="text-2xl font-bold text-white mb-6">你好，我是一名前端开发者</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        从事前端开发 3 年，擅长 React、Vue、JavaScript/TypeScript 等技术栈，专注于构建高性能、用户体验优秀的 Web 应用。
+                        喜欢探索新技术，热衷于开源社区，闲暇时间会写博客分享自己的学习心得和项目经验。
+                    </p>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        除了编程，我还喜欢摄影、旅行和阅读，相信技术和生活的平衡才能带来更好的创作灵感。
+                        如果你有技术问题想要交流，或者有合作机会，欢迎随时联系我。
+                    </p>
+
+                    <!-- 技能标签 -->
+                    <div class="flex flex-wrap gap-3 mb-8">
+                        <span class="px-4 py-2 bg-dark-300 rounded-lg text-accent font-medium">JavaScript</span>
+                        <span class="px-4 py-2 bg-dark-300 rounded-lg text-accent font-medium">TypeScript</span>
+                        <span class="px-4 py-2 bg-dark-300 rounded-lg text-accent font-medium">React</span>
+                        <span class="px-4 py-2 bg-dark-300 rounded-lg text-accent font-medium">Vue</span>
+                        <span class="px-4 py-2 bg-dark-300 rounded-lg text-accent font-medium">Tailwind CSS</span>
+                        <span class="px-4 py-2 bg-dark-300 rounded-lg text-accent font-medium">Node.js</span>
+                        <span class="px-4 py-2 bg-dark-300 rounded-lg text-accent font-medium">Webpack</span>
+                        <!-- 【拓展备注7】新增技能标签：复制上面一行，修改文字即可 -->
+                    </div>
+
+                    <a href="#" class="btn-primary">
+                        <i class="fa-solid fa-download mr-2"></i>下载简历
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark-300 py-12 px-6 md:px-12 border-t border-dark-100">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <a href="#" class="flex items-center gap-2 text-xl font-bold text-white mb-6 md:mb-0">
+                    <i class="fa-solid fa-feather-pointed text-accent"></i>
+                    <span>MyBlog</span>
+                </a>
+                <div class="flex gap-4">
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-dark-200 flex items-center justify-center text-gray-400 transition-all duration-300 hover:bg-accent hover:text-white hover:scale-110">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-dark-200 flex items-center justify-center text-gray-400 transition-all duration-300 hover:bg-accent hover:text-white hover:scale-110">
+                        <i class="fa-brands fa-twitter"></i>
+                    </a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-dark-200 flex items-center justify-center text-gray-400 transition-all duration-300 hover:bg-accent hover:text-white hover:scale-110">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-dark-200 flex items-center justify-center text-gray-400 transition-all duration-300 hover:bg-accent hover:text-white hover:scale-110">
+                        <i class="fa-solid fa-envelope"></i>
+                    </a>
+                    <!-- 【拓展备注8】页脚社交图标拓展：复制上面一行，修改图标和href即可 -->
+                </div>
+            </div>
+            <div class="border-t border-dark-100 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">© 2025 MyBlog. All rights reserved.</p>
+                <div class="flex gap-6 text-sm text-gray-500">
+                    <a href="#" class="hover:text-accent transition-colors duration-300">隐私政策</a>
+                    <a href="#" class="hover:text-accent transition-colors duration-300">使用条款</a>
+                    <a href="#" class="hover:text-accent transition-colors duration-300">联系我</a>
+                    <!-- 【拓展备注9】页脚链接拓展：复制上面一行，修改文字和href即可 -->
+                </div>
+            </div>
         </div>
     </footer>
 
-    <!-- 👇 保持外部 CDN 引用（暂不替换本地） -->
-    <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
-
+    <!-- JavaScript 交互逻辑 -->
     <script>
-        // 1. 复用 index 的移动端菜单逻辑（UI 一致）
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-
-        // 2. MD 解析核心逻辑（加载你的 MD 笔记并渲染）
-        const urlParams = new URLSearchParams(window.location.search);
-        const mdFileName = urlParams.get('name');
-        
-        if (!mdFileName) {
-            document.getElementById('articleContent').innerHTML = '<p class="text-red-500 text-center">❌ 未找到文章，请返回首页！</p>';
-        }
-
-        // 你的 MD 笔记元信息配置（和 index 的卡片信息一致）
-        const articleMetaConfig = {
-            // 示例：你的 MD 笔记配置
-            'js-closure': {
-                title: 'JavaScript 高级特性实战：闭包与异步编程',
-                date: '2025-11-28',
-                tag: 'JavaScript',
-                viewCount: '1200',
-                readTime: '10 分钟'
-            },
-            'react-study-notes': {
-                title: 'React学习笔记：从入门到实战',
-                date: '2025-09-15',
-                tag: 'React',
-                viewCount: '850',
-                readTime: '15 分钟'
-            },
-            // 新增你的其他 MD 笔记
-            'css-learning': {
-                title: 'CSS 布局全解析：Flex + Grid 实战',
-                date: '2025-10-20',
-                tag: 'CSS',
-                viewCount: '900',
-                readTime: '12 分钟'
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-dark-400/95', 'backdrop-blur-md', 'shadow-lg', 'shadow-dark-100/20');
+                navbar.classList.remove('py-4');
+                navbar.classList.add('py-2');
+            } else {
+                navbar.classList.remove('bg-dark-400/95', 'backdrop-blur-md', 'shadow-lg', 'shadow-dark-100/20');
+                navbar.classList.remove('py-2');
+                navbar.classList.add('py-4');
             }
-        };
+        });
 
-        // 加载并渲染 MD 文件
-        fetch(`./articles/${mdFileName}.md`)
-            .then(response => {
-                if (!response.ok) throw new Error('文章不存在');
-                return response.text();
-            })
-            .then(mdText => {
-                // 填充元信息
-                const meta = articleMetaConfig[mdFileName] || {
-                    title: mdFileName,
-                    date: '未知',
-                    tag: '未知',
-                    viewCount: '0',
-                    readTime: '未知'
-                };
-                document.getElementById('articleTitle').textContent = meta.title;
-                document.getElementById('publishDate').textContent = meta.date;
-                document.getElementById('articleTag').textContent = meta.tag;
-                document.getElementById('viewCount').textContent = meta.viewCount;
-                document.getElementById('readTime').textContent = meta.readTime;
+        // 移动端菜单切换
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            // 切换图标
+            const icon = menuBtn.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            }
+        });
 
-                // MD 转 HTML
-                const converter = new showdown.Converter({
-                    tables: true,
-                    tasklists: true,
-                    ghCodeBlocks: true,
-                    smartIndentationFix: true,
-                    strikethrough: true,
-                    underline: true
-                });
-                const html = converter.makeHtml(mdText);
-                document.getElementById('articleContent').innerHTML = html;
+        // 【核心拓展】栏目筛选功能
+        const categoryTags = document.querySelectorAll('.category-tag');
+        const blogCards = document.querySelectorAll('.blog-card');
 
-                // 代码高亮（兼容 React/JSX，无需单独 react 语言包）
-                hljs.configure({
-                    ignoreUnescapedHTML: true,
-                    languages: ['javascript', 'css', 'typescript', 'html']
+        categoryTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                // 移除所有标签的active状态
+                categoryTags.forEach(t => {
+                    t.classList.remove('active');
+                    t.classList.add('inactive');
                 });
-                document.querySelectorAll('pre code').forEach((block) => {
-                    if (block.className.includes('jsx') || block.className.includes('react')) {
-                        block.className = 'language-javascript';
-                    }
-                    hljs.highlightElement(block);
+                // 添加当前标签的active状态
+                tag.classList.remove('inactive');
+                tag.classList.add('active');
+
+                const selectedCategory = tag.dataset.category;
+
+                // 筛选博客卡片
+                blogCards.forEach(card => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.95)';
+                    card.style.pointerEvents = 'none';
+
+                    setTimeout(() => {
+                        if (selectedCategory === 'all' || card.dataset.category === selectedCategory) {
+                            card.style.display = 'block';
+                            card.style.opacity = '1';
+                            card.style.transform = 'scale(1)';
+                            card.style.pointerEvents = 'auto';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }, 200);
                 });
-            })
-            .catch(error => {
-                document.getElementById('articleContent').innerHTML = `<p class="text-red-500 text-center">❌ 加载失败：${error.message}</p>`;
             });
+        });
 
-        // 回到顶部逻辑
-        document.querySelector('a[href="#"]').addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+
+                    // 关闭移动端菜单
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        const icon = menuBtn.querySelector('i');
+                        icon.classList.remove('fa-xmark');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+            });
         });
     </script>
 </body>
+
 </html>
