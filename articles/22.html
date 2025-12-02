@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 高级特性实战：闭包与异步编程 | 我的博客</title>
+    <!-- 复用主站样式 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            100: '#333333',
+                            200: '#282828',
+                            300: '#1E1E1E',
+                            400: '#121212'
+                        },
+                        accent: '#8B5CF6',
+                        accentLight: '#A78BFA'
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .btn-primary {
+                @apply bg-accent text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:bg-accentLight hover:scale-105 active:scale-95;
+            }
+        }
+        body {
+            background-color: theme('colors.dark.400');
+            color: theme('colors.gray.200');
+            scroll-behavior: smooth;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: theme('colors.dark.300');
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.dark.100');
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.accent/60');
+        }
+        .article-content {
+            line-height: 1.8;
+        }
+        .article-content h2 {
+            @apply text-2xl font-bold text-white my-6 border-b border-dark-100 pb-2;
+        }
+        .article-content h3 {
+            @apply text-xl font-bold text-white my-4;
+        }
+        .article-content p {
+            @apply my-4 text-gray-300;
+        }
+        .article-content code {
+            @apply bg-dark-200 px-1 py-0.5 rounded text-accent;
+        }
+        .article-content pre {
+            @apply bg-dark-200 p-4 rounded-lg my-4 overflow-x-auto;
+        }
+        .article-content blockquote {
+            @apply border-l-4 border-accent pl-4 py-2 my-4 bg-dark-300/50;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- 导航栏（复用主站导航） -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-dark-400/95 backdrop-blur-md py-4 px-6 md:px-12 shadow-lg">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="../index.html" class="flex items-center gap-2 text-xl font-bold text-white">
+                <i class="fa-solid fa-feather-pointed text-accent"></i>
+                <span>MyBlog</span>
+            </a>
+            <a href="../index.html#blogs" class="btn-primary">
+                <i class="fa-solid fa-arrow-left mr-2"></i>返回博客列表
+            </a>
+        </div>
+    </nav>
+
+    <!-- 文章内容区 -->
+    <main class="pt-24 pb-20 px-6 md:px-12">
+        <div class="max-w-4xl mx-auto bg-dark-300/50 rounded-2xl p-8 md:p-12 shadow-xl">
+            <!-- 文章标题 -->
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-6">JavaScript 高级特性实战：闭包与异步编程</h1>
+            
+            <!-- 文章元信息 -->
+            <div class="flex flex-wrap gap-4 text-sm text-gray-400 mb-8 pb-4 border-b border-dark-100">
+                <span><i class="fa-solid fa-calendar mr-1"></i> 2025-11-28</span>
+                <span><i class="fa-solid fa-tag mr-1"></i> JavaScript</span>
+                <span><i class="fa-solid fa-eye mr-1"></i> 1.2k</span>
+                <span><i class="fa-solid fa-clock mr-1"></i> 阅读时长：15 分钟</span>
+            </div>
+            
+            <!-- 文章正文 -->
+            <div class="article-content">
+                <!-- 【自定义这里】替换为你的文章内容 -->
+                <h2>一、闭包的核心概念</h2>
+                <p>闭包是指有权访问另一个函数作用域中变量的函数，简单来说，闭包就是一个函数及其所处的词法环境的组合。</p>
+                
+                <pre><code>// 闭包基础示例
+function outer() {
+    const message = 'Hello Closure';
+    function inner() {
+        console.log(message); // 访问外部函数的变量
+    }
+    return inner;
+}
+
+const myFunc = outer();
+myFunc(); // 输出: Hello Closure</code></pre>
+
+                <h3>1.1 闭包的形成条件</h3>
+                <blockquote>
+                    1. 函数嵌套<br>
+                    2. 内部函数引用外部函数的变量<br>
+                    3. 外部函数返回内部函数
+                </blockquote>
+                
+                <h2>二、异步编程与闭包结合</h2>
+                <p>在异步编程中，闭包可以很好地解决回调函数中变量作用域的问题...</p>
+                
+                <!-- 更多文章内容 -->
+            </div>
+            
+            <!-- 文章底部 -->
+            <div class="mt-12 pt-6 border-t border-dark-100 flex flex-wrap gap-4 justify-between">
+                <div class="flex gap-2">
+                    <span class="px-3 py-1 bg-dark-200 rounded-full text-sm">JavaScript</span>
+                    <span class="px-3 py-1 bg-dark-200 rounded-full text-sm">闭包</span>
+                    <span class="px-3 py-1 bg-dark-200 rounded-full text-sm">异步编程</span>
+                </div>
+                <div class="flex gap-4">
+                    <button class="text-gray-400 hover:text-accent transition-colors">
+                        <i class="fa-solid fa-share-nodes mr-1"></i>分享
+                    </button>
+                    <button class="text-gray-400 hover:text-accent transition-colors">
+                        <i class="fa-solid fa-heart mr-1"></i>点赞
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 相关推荐 -->
+        <div class="max-w-4xl mx-auto mt-12">
+            <h3 class="text-xl font-bold text-white mb-6">相关推荐</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 推荐文章1 -->
+                <a href="./react-state.html" class="bg-dark-300/50 rounded-xl p-4 hover:bg-dark-200 transition-all duration-300">
+                    <h4 class="font-semibold text-white mb-2">React 状态管理对比：Redux vs Context + useReducer</h4>
+                    <p class="text-sm text-gray-400 line-clamp-2">对比 Redux 和 React 内置的 Context + useReducer 方案，分析各自的优缺点...</p>
+                </a>
+                <!-- 推荐文章2 -->
+                <a href="./typescript-guide.html" class="bg-dark-300/50 rounded-xl p-4 hover:bg-dark-200 transition-all duration-300">
+                    <h4 class="font-semibold text-white mb-2">TypeScript 实战指南：从入门到类型体操</h4>
+                    <p class="text-sm text-gray-400 line-clamp-2">从基础类型定义到高级类型体操，结合实际项目案例讲解 TypeScript...</p>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark-300 py-8 px-6 border-t border-dark-100">
+        <div class="max-w-7xl mx-auto text-center text-gray-500 text-sm">
+            © 2025 MyBlog. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>
