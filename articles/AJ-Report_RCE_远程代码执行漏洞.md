@@ -46,4 +46,4 @@ Content-Length: 145
 
 ## 漏洞复现
 
-![alt text](photos/image1.png)
+![alt text](/articles/photos/image1.png)
