@@ -1,6 +1,6 @@
 # AJ-Report RCE 远程代码执行漏洞
 
-![alt text](photos/image.png)
+![alt text](/articles/photos/image.png)
 
 ## POC 1
 ```
