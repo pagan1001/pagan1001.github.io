@@ -4,16 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- ===== 新增：自定义Icon（替换为你的路径） ===== -->
     <link rel="icon" href="./icons/favicon.ico" type="image/x-icon">
     <title>文章详情 | 我的博客</title>
 
     <link rel="stylesheet" href="./assets/css/tailwindcss.min.css">
     <link rel="stylesheet" href="./assets/css/all.min.css">
-    <link rel="stylesheet"
-        href="./assets/css/atom-one-dark.min.css">
+    <link rel="stylesheet" href="./assets/css/atom-one-dark.min.css">
 
-    <!-- 👇 完全复用 index 的自定义样式（保证 UI 一致） -->
     <style>
         :root {
             --dark-900: #121212;
@@ -90,23 +87,18 @@
             overflow: hidden;
         }
 
-        /* MD 内容适配 index 的 UI 样式（关键：和主页风格统一） */
         .article-content {
             max-width: 1200px;
-            /* 和 index 的容器宽度一致 */
             margin: 0 auto;
             padding: 0 20px;
             line-height: 1.8;
             color: var(--gray-400);
-            /* 和 index 文本色一致 */
         }
 
-        /* MD 标题样式：匹配 index 的卡片标题 */
         .article-content h1 {
             font-size: 2rem;
             font-weight: 600;
             color: white;
-            /* 和 index 卡片标题色一致 */
             margin: 2rem 0 1rem;
             border-bottom: 1px solid var(--dark-100);
             padding-bottom: 0.5rem;
@@ -126,13 +118,11 @@
             margin: 1.2rem 0 0.6rem;
         }
 
-        /* MD 文本/段落：匹配 index 的卡片简介 */
         .article-content p {
             margin: 0.8rem 0;
             color: var(--gray-400);
         }
 
-        /* MD 代码块：匹配 index 的暗黑风格 */
         .article-content pre {
             background: var(--dark-200);
             padding: 1rem;
@@ -148,7 +138,6 @@
             border-radius: 4px;
             font-family: monospace;
             color: var(--accent);
-            /* 代码色匹配 index 的强调色 */
         }
 
         .article-content pre code {
@@ -157,7 +146,6 @@
             color: var(--gray-400);
         }
 
-        /* MD 图片：适配 index 的卡片图片风格 */
         .article-content img {
             max-width: 100%;
             border-radius: 8px;
@@ -165,7 +153,6 @@
             border: 1px solid var(--dark-100);
         }
 
-        /* MD 表格/引用：匹配暗黑风格 */
         .article-content table {
             border-collapse: collapse;
             width: 100%;
@@ -199,26 +186,21 @@
     </style>
 </head>
 
-<!-- 完全复用 index 的 body 结构 + 暗黑背景 -->
-
 <body class="bg-dark-900 text-white min-h-screen">
-    <!-- 100% 复刻 index 的导航栏（UI 完全一致） -->
     <nav class="bg-dark-800 py-4 px-6 sticky top-0 z-50 animate-fade-in">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="./index.html" class="text-xl font-bold text-accent">Pagan's Blog</a>
-            <!-- 复用 index 的导航菜单 -->
             <div class="hidden md:flex gap-6">
                 <a href="./index.html" class="text-gray-400 hover:text-accent transition-colors">首页</a>
-                <a href="./index.html?category=tech" class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
+                <a href="./index.html?category=tech"
+                    class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
                 <a href="./index.html?category=life" class="text-gray-400 hover:text-accent transition-colors">生活感悟</a>
                 <a href="./index.html?category=notes" class="text-gray-400 hover:text-accent transition-colors">学习笔记</a>
             </div>
-            <!-- 移动端菜单按钮（复用 index） -->
             <button class="md:hidden text-gray-400 hover:text-accent" id="mobileMenuBtn">
                 <i class="fa-solid fa-bars text-xl"></i>
             </button>
         </div>
-        <!-- 移动端菜单（复用 index） -->
         <div class="md:hidden hidden bg-dark-200 mt-4 p-4 rounded-lg animate-fade-in" id="mobileMenu">
             <div class="flex flex-col gap-3">
                 <a href="./index.html" class="text-gray-400 hover:text-accent transition-colors">首页</a>
@@ -229,9 +211,7 @@
         </div>
     </nav>
 
-    <!-- MD 内容区域（替换 index 的博客卡片区域，布局对齐） -->
     <main class="py-10 animate-fade-in">
-        <!-- 文章标题 + 元信息（样式匹配 index 的卡片元信息） -->
         <div class="max-w-7xl mx-auto px-6 mb-8">
             <h1 id="articleTitle" class="text-3xl font-bold text-white mb-4"></h1>
             <div id="articleMeta" class="flex flex-wrap gap-4 text-gray-500 text-sm">
@@ -242,10 +222,8 @@
             </div>
         </div>
 
-        <!-- MD 渲染内容（样式适配 index 的 UI） -->
         <div id="articleContent" class="article-content"></div>
 
-        <!-- 回到顶部按钮（复用 index 的样式） -->
         <div class="max-w-7xl mx-auto px-6 mt-10 text-center">
             <a href="#" class="btn-primary py-2 px-6 inline-block">
                 <i class="fa-solid fa-arrow-up mr-1"></i> 回到顶部
@@ -253,7 +231,6 @@
         </div>
     </main>
 
-    <!-- 复刻 index 的页脚（UI 完全一致） -->
     <footer class="bg-dark-800 py-6 mt-10 animate-fade-in">
         <div class="max-w-7xl mx-auto px-6 text-center text-gray-500">
             <p>Copyright © 2025 Pagan's Blog. All rights reserved | 基于 Markdown 构建</p>
@@ -265,14 +242,13 @@
         </div>
     </footer>
 
-    <!-- 👇 保持外部 CDN 引用（暂不替换本地） -->
     <script src="./assets/js/showdown.min.js"></script>
     <script src="./assets/js/highlight.min.js"></script>
     <script src="./assets/js/javascript.min.js"></script>
     <script src="./assets/js/css.min.js"></script>
     <script src="./assets/js/typescript.min.js"></script>
     <script>
-        // 1. 复用 index 的移动端菜单逻辑（UI 一致）
+        // 移动端菜单逻辑
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         if (mobileMenuBtn) {
@@ -281,21 +257,17 @@
             });
         }
 
-        // 2. MD 解析核心逻辑（加载你的 MD 笔记并渲染）
-        // const urlParams = new URLSearchParams(window.location.search);
-        // const mdFileName = urlParams.get('name');
+        // MD 解析核心逻辑
         const params = new URLSearchParams(window.location.search);
-        const category = params.get('category') || ''; // 分类目录（如2025hp）
+        const category = params.get('category') || '';
         const mdFileName = params.get('name');
-
 
         if (!mdFileName) {
             document.getElementById('articleContent').innerHTML = '<p class="text-red-500 text-center">❌ 未找到文章，请返回首页！</p>';
         }
 
-        // 你的 MD 笔记元信息配置（和 index 的卡片信息一致）
+        // 文章元信息配置
         const articleMetaConfig = {
-            // 示例：你的 MD 笔记配置
             'js-closure': {
                 title: 'JavaScript 高级特性实战：闭包与异步编程',
                 date: '2025-11-28',
@@ -310,65 +282,57 @@
                 viewCount: '850',
                 readTime: '15 分钟'
             },
-            // 新增你的其他 MD 笔记
             'css-learning': {
                 title: 'CSS 布局全解析：Flex + Grid 实战',
                 date: '2025-10-20',
                 tag: 'CSS',
                 viewCount: '900',
                 readTime: '12 分钟'
+            },
+            // 添加AJ-Report文章的元信息
+            'AJ-Report_RCE_远程代码执行漏洞': {
+                title: 'AJ-Report RCE 远程代码执行漏洞',
+                date: '2025-11-03',
+                tag: '攻防演练',
+                viewCount: '1.2k',
+                readTime: '8 分钟'
             }
         };
 
-        // 加载并渲染 MD 文件
+        // 加载并渲染MD文件
+        fetch(`./MD/${category}/${mdFileName}.md`)
+            .then(response => {
+                if (!response.ok) throw new Error('文件不存在');
+                return response.text();
+            })
+            .then(mdText => {
+                // 填充元信息
+                const meta = articleMetaConfig[mdFileName] || {
+                    title: mdFileName,
+                    date: '未知',
+                    tag: '未知',
+                    viewCount: '0',
+                    readTime: '未知'
+                };
+                document.getElementById('articleTitle').textContent = meta.title;
+                document.getElementById('publishDate').textContent = meta.date;
+                document.getElementById('articleTag').textContent = meta.tag;
+                document.getElementById('viewCount').textContent = meta.viewCount;
+                document.getElementById('readTime').textContent = meta.readTime;
 
-            // 2. 检查文件名是否存在（避免空参数错误）
-            if (!mdFileName) {
-                document.getElementById('articleContent').innerHTML = '<p class="text-red-500 text-center">❌ 未找到文章，请返回首页！</p>';
-            } else {
-                // 3. 拼接分类目录路径（核心修改）
-                fetch(`./MD/${category}/${mdFileName}.md`)
-                    .then(response => {
-                        if (!response.ok) throw new Error('文件不存在');
-                        return response.text();
-                    })
-                    .then(mdText => {
-                        // 填充元信息（和之前逻辑一致，无需修改）
-                        const meta = articleMetaConfig[mdFileName] || {
-                            title: mdFileName,
-                            date: '未知',
-                            tag: '未知',
-                            viewCount: '0',
-                            readTime: '未知'
-                        };
-                        document.getElementById('articleTitle').textContent = meta.title;
-                        document.getElementById('publishDate').textContent = meta.date;
-                        document.getElementById('articleTag').textContent = meta.tag;
-                        document.getElementById('viewCount').textContent = meta.viewCount;
-                        document.getElementById('readTime').textContent = meta.readTime;
+                // MD转HTML
+                const converter = new showdown.Converter({
+                    tables: true,
+                    tasklists: true,
+                    ghCodeBlocks: true,
+                    smartIndentationFix: true,
+                    strikethrough: true,
+                    underline: true
+                });
+                const html = converter.makeHtml(mdText);
+                document.getElementById('articleContent').innerHTML = html;
 
-                        // MD 转 HTML（保持原配置）
-                        const converter = new showdown.Converter({
-                            tables: true,
-                            tasklists: true,
-                            ghCodeBlocks: true,
-                            smartIndentationFix: true,
-                            strikethrough: true,
-                            underline: true
-                        });
-                        const html = converter.makeHtml(mdText);
-                        document.getElementById('articleContent').innerHTML = html;
-
-                        // 补充：代码高亮（如果需要，之前可能遗漏）
-                        hljs.highlightAll();
-                    })
-                    .catch(error => {
-                        // 错误提示更具体（方便排查路径问题）
-                        document.getElementById('articleContent').innerHTML = `<p class="text-red-500">加载失败：${error.message}，路径：./MD/${category}/${mdFileName}.md</p>`;
-                    });
-            }
-
-                // 代码高亮（兼容 React/JSX，无需单独 react 语言包）
+                // 代码高亮
                 hljs.configure({
                     ignoreUnescapedHTML: true,
                     languages: ['javascript', 'css', 'typescript', 'html']
@@ -381,7 +345,7 @@
                 });
             })
             .catch(error => {
-                document.getElementById('articleContent').innerHTML = `<p class="text-red-500 text-center">❌ 加载失败：${error.message}</p>`;
+                document.getElementById('articleContent').innerHTML = `<p class="text-red-500">加载失败：${error.message}，路径：./MD/${category}/${mdFileName}.md</p>`;
             });
 
         // 回到顶部逻辑
