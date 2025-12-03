@@ -321,34 +321,52 @@
         };
 
         // 加载并渲染 MD 文件
-        fetch(`./MD/${category}/${mdFileName}.md`)
-                .then(response => {
-                    if (!response.ok) throw new Error('文件不存在');
-                    return response.text();
-                })
-                .then(markdown => {
-                    // 渲染逻辑（保持不变）
-                    const converter = new showdown.Converter();
-                    const html = converter.makeHtml(markdown);
-                    document.getElementById('articleContent').innerHTML = html;
-                    // 代码高亮（如果有）
-                    hljs.highlightAll();
-                })
-                .catch(error => {
-                    document.getElementById('articleContent').innerHTML = `<p class="text-red-500">加载文章失败：${error.message}</p>`;
-                });
 
-                // MD 转 HTML
-                const converter = new showdown.Converter({
-                    tables: true,
-                    tasklists: true,
-                    ghCodeBlocks: true,
-                    smartIndentationFix: true,
-                    strikethrough: true,
-                    underline: true
-                });
-                const html = converter.makeHtml(mdText);
-                document.getElementById('articleContent').innerHTML = html;
+            // 2. 检查文件名是否存在（避免空参数错误）
+            if (!mdFileName) {
+                document.getElementById('articleContent').innerHTML = '<p class="text-red-500 text-center">❌ 未找到文章，请返回首页！</p>';
+            } else {
+                // 3. 拼接分类目录路径（核心修改）
+                fetch(`./MD/${category}/${mdFileName}.md`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('文件不存在');
+                        return response.text();
+                    })
+                    .then(mdText => {
+                        // 填充元信息（和之前逻辑一致，无需修改）
+                        const meta = articleMetaConfig[mdFileName] || {
+                            title: mdFileName,
+                            date: '未知',
+                            tag: '未知',
+                            viewCount: '0',
+                            readTime: '未知'
+                        };
+                        document.getElementById('articleTitle').textContent = meta.title;
+                        document.getElementById('publishDate').textContent = meta.date;
+                        document.getElementById('articleTag').textContent = meta.tag;
+                        document.getElementById('viewCount').textContent = meta.viewCount;
+                        document.getElementById('readTime').textContent = meta.readTime;
+
+                        // MD 转 HTML（保持原配置）
+                        const converter = new showdown.Converter({
+                            tables: true,
+                            tasklists: true,
+                            ghCodeBlocks: true,
+                            smartIndentationFix: true,
+                            strikethrough: true,
+                            underline: true
+                        });
+                        const html = converter.makeHtml(mdText);
+                        document.getElementById('articleContent').innerHTML = html;
+
+                        // 补充：代码高亮（如果需要，之前可能遗漏）
+                        hljs.highlightAll();
+                    })
+                    .catch(error => {
+                        // 错误提示更具体（方便排查路径问题）
+                        document.getElementById('articleContent').innerHTML = `<p class="text-red-500">加载失败：${error.message}，路径：./MD/${category}/${mdFileName}.md</p>`;
+                    });
+            }
 
                 // 代码高亮（兼容 React/JSX，无需单独 react 语言包）
                 hljs.configure({
