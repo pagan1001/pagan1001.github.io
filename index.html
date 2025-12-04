@@ -555,6 +555,33 @@
 
     <!-- JavaScript 交互逻辑 -->
     <script>
+        // 页面加载时处理URL参数
+        document.addEventListener('DOMContentLoaded', () => {
+            // 解析URL中的category参数
+            const params = new URLSearchParams(window.location.search);
+            const targetCategory = params.get('category');
+
+            if (targetCategory) {
+                // 找到对应的分类标签
+                const targetTag = document.querySelector(`.category-tag[data-category="${targetCategory}"]`);
+
+                if (targetTag) {
+                    // 触发标签点击事件（自动筛选文章）
+                    targetTag.click();
+
+                    // 滚动到博客列表区域
+                    const blogsSection = document.getElementById('blogs');
+                    if (blogsSection) {
+                        blogsSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            }
+        });
+
+
         // 导航栏滚动效果
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
