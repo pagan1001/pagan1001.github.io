@@ -1,4 +1,4 @@
-# :penguin: ***应急响应操作手册（Linux篇）***</big>
+# 🐧 ***应急响应操作手册（Linux篇）***</big>
 
 # ***1、检查系统用户*** 📌
 
@@ -197,9 +197,9 @@ sysv-rc-conf --list
 ![alt text](/MD/yjxy/yjxy_photos/image15.png)
 
 # ***10、确保Linux系统安全*** 📌
->:one: &emsp; 用户名和密码不能设置太简单<br><br>
-:two: &emsp; 不要使用默认的远程端口，避免被扫描到根据端口扫描，然后再进行密码扫描，默认的端口往往就是扫描器的对象。比如：22端口、6379端口等<br><br>
-:three: &emsp; 使用一些安全策略进行保护系统开放的端口使用iptables或者配置/etc/hosts.deny 和/etc/hosts.allow进行白名单设置
+>1️⃣ &emsp; 用户名和密码不能设置太简单<br><br>
+2️⃣ &emsp; 不要使用默认的远程端口，避免被扫描到根据端口扫描，然后再进行密码扫描，默认的端口往往就是扫描器的对象。比如：22端口、6379端口等<br><br>
+3️⃣ &emsp; 使用一些安全策略进行保护系统开放的端口使用iptables或者配置/etc/hosts.deny 和/etc/hosts.allow进行白名单设置
 可以对/etc/passwd、/etc/group、/etc/sudoers、/etc/shadow等用户信息文件进行锁定<br><br>
-:four: &emsp; 禁ping 设置<br><br>
-:five: &emsp; 安装和使用防火墙、加密数据以及使用防病毒软件
+4️⃣ &emsp; 禁ping 设置<br><br>
+5️⃣ &emsp; 安装和使用防火墙、加密数据以及使用防病毒软件
