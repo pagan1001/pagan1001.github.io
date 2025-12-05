@@ -21,7 +21,7 @@
 
 # 入侵排查思路
 
-## ***1、检查系统账号安全*** :pushpin:
+## ***1、检查系统账号安全*** 📌
 
 - 查看服务器是否存在可疑账号、新增账号
 ```
@@ -59,7 +59,7 @@
 ```
 ![alt text](/MD/yjxy/yjxy_photos/win4.png)
 
-## ***2、检查端口、进程*** :pushpin:
+## ***2、检查端口、进程*** 📌
 - 检查异常端口
 
 <mark>***是否有远程连接，可疑连接***</mark>
@@ -87,7 +87,7 @@
 进程的路径是否合法<br>
 CPU 或内存资源占用长时间过高的进程<br>
 
-## ***3、启动项、计划任务、服务*** :pushpin:
+## ***3、启动项、计划任务、服务*** 📌
 
 - 检查服务器是否有异常的启动项
 ```
@@ -139,7 +139,7 @@ HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Runonce
 
 ![alt text](/MD/yjxy/yjxy_photos/win15.png)
 
-## ***4、事件日志*** :pushpin:
+## ***4、事件日志*** 📌
 Windows系统日志是记录系统中硬件、软件和系统问题的信息，同时还可以监视系统中发生的事件。用户可以通过它来检查错误发生的原因，或者寻找受到攻击时攻击者留下的痕迹。
 
 - 应用程序日志
@@ -203,7 +203,7 @@ Windows系统日志是记录系统中硬件、软件和系统问题的信息，�
 1,2,3,4，用来查看windows系统更新的记录，事件ID前后顺序为“已挂起、已安装、错误失败、提示重启” 。**事件ID3，更新错误或失败是重点查看对象**
 ```
 
-## ***5、系统相关信息*** :pushpin:
+## ***5、系统相关信息*** 📌
 
 - 系统版本、补丁信息
 
@@ -231,7 +231,7 @@ Windows系统日志是记录系统中硬件、软件和系统问题的信息，�
 2、利用计算机自带文件搜索功能，指定修改时间进行搜索
 ```
 
-## ***6、各中间件/服务器日志默认存放位置*** :pushpin:
+## ***6、各中间件/服务器日志默认存放位置*** 📌
 
 ### **IIS**
 ```
@@ -259,11 +259,11 @@ domain_name/servers/server_name/logs/ server_name.log：server启停日志 acces
 LOG4J配置默认Deploy/conf/ 如jboss/server/default/conf/jboss-log4j.xml
 ```
 
-## ***7、工具进行查杀*** :pushpin:
+## ***7、工具进行查杀*** 📌
 1、卡巴斯基：http://devbuilds.kaspersky-labs.com/devbuilds/KVRT/latest/full/KVRT.exe<br>
 2、火绒安全软件：https://www.huorong.cn<br>
 3、D盾_Web查杀：http://www.d99net.net/index.asp<br>
 4、Safe3：http://www.uusec.com/webshell.zip<br>
 
-## ***8、一键Windows应急响应检测脚本*** :pushpin:
+## ***8、一键Windows应急响应检测脚本*** 📌
 GitHub项目网址：https://github.com/book4yi/Winscan
