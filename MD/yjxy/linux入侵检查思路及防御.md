@@ -109,7 +109,8 @@ cat /home/bjj/.bash_history
 # ***6、异常文件检查*** 📌
 
 >异常文件检查是排查黑客是否有修改服务器上的敏感目录或文件。<br>如/tmp目录下的文件，同时注意隐藏文件夹，以“..”为名的文件夹具有隐藏属性。
-```shell
+
+```
 find / -uid 0 –perm -4000 –print
 find / -size +10000k –print
 find / -name "…" –print
