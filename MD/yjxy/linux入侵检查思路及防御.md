@@ -103,7 +103,7 @@ cat /home/bjj/.bash_history
 
 向test.txt文件中写入计划任务
 ```shell
-如：*/1 * * * * echo "hello world" >> /tmp/test.txt 每分钟写入文件:每隔一分钟输出hello world
+如：*/1 * * * * echo "hello world" >> /tmp/test.txt 每分钟写入文件:每隔一分钟输出hello world
 ```
 
 # ***6、异常文件检查*** 📌
@@ -111,18 +111,18 @@ cat /home/bjj/.bash_history
 >异常文件检查是排查黑客是否有修改服务器上的敏感目录或文件。<br>如/tmp目录下的文件，同时注意隐藏文件夹，以“..”为名的文件夹具有隐藏属性。
 
 ```shell
-find  /  -uid 0  –perm  -4000  –print
-find  /  -size  +10000k  –print
-find  /  -name  "…"  –print
-find  /  -name  ".."  –print
-find  /  -name  "."  –print
-find  /  -name  ";"  –print
+find / -uid 0 –perm -4000 –print
+find / -size +10000k –print
+find / -name "…" –print
+find / -name ".." –print
+find / -name "." –print
+find / -name ";" –print
 ```
 
 <mark>***如：发现WEBSHELL、远控木马的创建时间，如何找出同一时间范围内创建的文件?***</mark>
 
 ```shell
-find /opt -iname "*" -atime 1 -type f   //找出 /opt 下一天前访问过的文件
+find /opt -iname "*" -atime 1 -type f  //找出 /opt 下一天前访问过的文件
 ```
 
 ![alt text](/MD/yjxy/yjxy_photos/image11.png)
@@ -175,30 +175,30 @@ find /opt -iname "*" -atime 1 -type f   //找出 /opt 下一天前访�
 <mark>***查询已安装的服务***</mark>
 
 ```shell
-chkconfig  --list  查看服务自启动状态，可以看到所有的RPM包安装的服务
+chkconfig --list 查看服务自启动状态，可以看到所有的RPM包安装的服务
 
-ps  aux  |  grep  crond  查看当前服务
+ps aux | grep crond 查看当前服务
 
 系统在3与5级别下的启动项
 
 中文环境
 
-chkconfig  --list |  grep  "3:启用\|5:启用"
+chkconfig --list | grep "3:启用\|5:启用"
 
 英文环境
 
-chkconfig  --list |  grep  "3:on\|5:on"
+chkconfig --list | grep "3:on\|5:on"
 
 Ubuntu可以使用sysv-rc-conf代替chkconfig
 
-sysv-rc-conf  --list
+sysv-rc-conf --list
 ```
 
 ![alt text](/MD/yjxy/yjxy_photos/image15.png)
 
 # ***10、确保Linux系统安全*** 📌
 >:one: &emsp; 用户名和密码不能设置太简单<br><br>
-:two:  &emsp; 不要使用默认的远程端口，避免被扫描到根据端口扫描，然后再进行密码扫描，默认的端口往往就是扫描器的对象。比如：22端口、6379端口等<br><br>
+:two: &emsp; 不要使用默认的远程端口，避免被扫描到根据端口扫描，然后再进行密码扫描，默认的端口往往就是扫描器的对象。比如：22端口、6379端口等<br><br>
 :three: &emsp; 使用一些安全策略进行保护系统开放的端口使用iptables或者配置/etc/hosts.deny 和/etc/hosts.allow进行白名单设置
 可以对/etc/passwd、/etc/group、/etc/sudoers、/etc/shadow等用户信息文件进行锁定<br><br>
 :four: &emsp; 禁ping 设置<br><br>
