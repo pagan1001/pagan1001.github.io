@@ -103,13 +103,13 @@ cat /home/bjj/.bash_history
 
 向test.txt文件中写入计划任务
 ```shell
-如：*/1 * * * * echo "hello world" >> /tmp/test.txt 每分钟写入文件  :每隔一分钟输出hello world
+如：*/1 * * * * echo "hello world" >> /tmp/test.txt 每分钟写入文件  :每隔一分钟输出hello world
 ```
 
 # ***6、异常文件检查*** 📌
 
 >异常文件检查是排查黑客是否有修改服务器上的敏感目录或文件。<br>如/tmp目录下的文件，同时注意隐藏文件夹，以“..”为名的文件夹具有隐藏属性。
-```shell
+```
 find / -uid 0 –perm -4000 –print
 find / -size +10000k –print
 find / -name "…" –print
@@ -120,7 +120,7 @@ find / -name " " –print
 
 <mark>***如：发现WEBSHELL、远控木马的创建时间，如何找出同一时间范围内创建的文件?***</mark>
 
-```shell
+```
 find /opt -iname "*" -atime 1 -type f   //找出 /opt 下一天前访问过的文件
 ```
 
