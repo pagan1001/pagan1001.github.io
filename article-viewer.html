@@ -123,18 +123,18 @@
             color: var(--gray-400);
         }
 
+        /* 统一为Mac风格代码块样式（与1.html保持一致） */
         .article-content pre {
-            /* 替换原有背景为带纹理的深色（轻微渐变增强质感） */
-            background: linear-gradient(rgba(45, 45, 45, 0.95), rgba(30, 30, 30, 0.95)), 
-                        url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%234a4a4a' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-            padding: 1.2rem 1.5rem; /* 增加内边距，更宽松 */
-            border-radius: 8px;
+            background-color: #1a202c;
+            color: #e2e8f0;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+            padding: 1.5rem;
+            border-radius: 0 0 8px 8px;
             overflow-x: auto;
-            margin: 1.5rem 0; /* 增加上下间距 */
-            border: 1px solid rgba(70, 70, 70, 0.3); /* 更淡的边框 */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* 增强阴影立体感 */
-            font-family: 'Consolas', 'Monaco', 'Menlo', monospace; /* 更清晰的等宽字体 */
-            line-height: 1.6; /* 优化行高，避免拥挤 */
+            margin: 0;
+            border: none;
+            box-shadow: none;
+            line-height: 1.6;
         }
 
         /* 优化单行代码样式（与代码块区分） */
@@ -149,16 +149,43 @@
         .article-content pre code {
             background: transparent;
             padding: 0;
-            color: var(--gray-400);
+            color: #e2e8f0;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
         }
 
-        
+        /* Mac风格按钮样式（与1.html完全一致） */
+        .mac-buttons {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background-color: #2d3748;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mac-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            cursor: default;
+        }
+
+        .mac-btn-close {
+            background-color: #f56565;
+        }
+
+        .mac-btn-minimize {
+            background-color: #f6e05e;
+        }
+
+        .mac-btn-maximize {
+            background-color: #48bb78;
+        }
+
         /* 修复Mac按钮与代码块的衔接 */
-        .mac-buttons + pre {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
+        .mac-buttons+pre {
             margin-top: 0;
-            border-top: none; /* 移除顶部边框，与按钮容器无缝衔接 */
         }
 
         .article-content img {
@@ -198,36 +225,6 @@
             padding: 1rem;
             border-radius: 0 8px 8px 0;
         }
-        /* Mac风格按钮样式 - 新增代码 */
-        .mac-buttons {
-            display: flex;
-            gap: 8px;
-            padding: 12px 16px;
-            background-color: var(--dark-200); /* 匹配现有深色背景 */
-            border-radius: 8px 8px 0 0;
-            border-bottom: 1px solid var(--dark-100); /* 匹配现有边框色 */
-        }
-
-        .mac-btn {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            border: none;
-            cursor: default; /* 去除按钮 hover 指针效果 */
-        }
-
-        .mac-btn-close {
-            background-color: #f56565;
-        }
-
-        .mac-btn-minimize {
-            background-color: #f6e05e;
-        }
-
-        .mac-btn-maximize {
-            background-color: #48bb78;
-        }
-
     </style>
 </head>
 
@@ -243,7 +240,8 @@
                 <a href="./index.html?category=2025hp"
                     class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
                 <a href="./index.html?category=yjxy" class="text-gray-400 hover:text-accent transition-colors">应急响应</a>
-                <a href="./index.html?category=middleware" class="text-gray-400 hover:text-accent transition-colors">中间件</a>
+                <a href="./index.html?category=middleware"
+                    class="text-gray-400 hover:text-accent transition-colors">中间件</a>
             </div>
             <button class="md:hidden text-gray-400 hover:text-accent" id="mobileMenuBtn">
                 <i class="fa-solid fa-bars text-xl"></i>
@@ -252,9 +250,11 @@
         <div class="md:hidden hidden bg-dark-200 mt-4 p-4 rounded-lg animate-fade-in" id="mobileMenu">
             <div class="flex flex-col gap-3">
                 <a href="./index.html" class="text-gray-400 hover:text-accent transition-colors">首页</a>
-                <a href="./index.html?category=2025hp" class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
+                <a href="./index.html?category=2025hp"
+                    class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
                 <a href="./index.html?category=yjxy" class="text-gray-400 hover:text-accent transition-colors">应急响应</a>
-                <a href="./index.html?category=middleware" class="text-gray-400 hover:text-accent transition-colors">中间件</a>
+                <a href="./index.html?category=middleware"
+                    class="text-gray-400 hover:text-accent transition-colors">中间件</a>
             </div>
         </div>
     </nav>
@@ -428,8 +428,8 @@
                 });
                 const html = converter.makeHtml(mdText);
                 document.getElementById('articleContent').innerHTML = html;
-                
-                 // 【添加Mac风格按钮的代码】
+
+                // 添加Mac风格按钮
                 document.querySelectorAll('.article-content pre').forEach(pre => {
                     // 创建按钮容器
                     const macButtons = document.createElement('div');
@@ -455,11 +455,8 @@
 
                     // 将按钮容器插入到 pre 标签前面
                     pre.parentNode.insertBefore(macButtons, pre);
-
-                    // 调整代码块样式，与按钮容器衔接
-                    pre.style.borderRadius = '0 0 8px 8px'; // 去除顶部圆角
-                    pre.style.marginTop = '0'; // 取消顶部间距，与按钮容器无缝连接
                 });
+
                 // 代码高亮
                 hljs.configure({
                     ignoreUnescapedHTML: true,
