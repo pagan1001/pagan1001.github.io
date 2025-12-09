@@ -8,19 +8,6 @@
 
 ![alt text](/MD/2025hp/photos/image14.png)
 
-
-<span style="
-  display: block;
-  width: 100%;
-  height: 30px;
-  margin-bottom: 0; /* 去掉负边距，避免错位 */
-  border-radius: 5px;
-  background-color: rgb(40, 44, 52); /* 背景色单独写 */
-  background-image: url('https://mmbiz.qpic.cn/mmbiz_svg/LHdtlaBo22eFzV7FI1PRdrXcsAyshUFaa5lJnNWUxib4iabVPPs60cQOuUZnzIFricwXLclHeC1a2dDTZYMb7rOc5JaDYj0Q87s/640?wx_fmt=svg'); /* 简化URL */
-  background-position: 10px 10px; /* 背景位置单独写 */
-  background-size: 40px; /* 背景尺寸单独写 */
-  background-repeat: no-repeat; /* 禁止重复 */
-"></span>
 ```java
 public static String initFilePath(String prePath) {
     StringBuffer sb = new StringBuffer();
