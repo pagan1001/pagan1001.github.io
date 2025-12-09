@@ -7,6 +7,7 @@
 |cat/etc/passwd|查看是否有异常的系统用户|
 
 ![alt text](/MD/yjxy/yjxy_photos/image.png)
+
 >/etc/passwd 是一个文本文件，其中包含了登录 Linux 系统所必需的每个用户的信息。它保存用户的有用信息。<br>如<用户名：密码：用户 ID：群组 ID：用户 ID 信息：用户的根目录：Shell<br><br>
 ***1、用户名（root）***： 已创建用户的用户名，字符长度 1 个到 12 个字符。<br><br>
 ***2、密码（x）***：代表加密密码保存在 `/etc/shadow 文件中。<br><br>
