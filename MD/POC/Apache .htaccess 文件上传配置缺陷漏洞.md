@@ -76,7 +76,6 @@ if ($filename === '.htaccess') {
 </Directory>
 ```
 ### 3. 加强文件上传的整体验证<br><br>
-&emsp;&emsp;&emsp;
 使用白名单机制：仅允许上传业务所需的安全扩展名（如.jpg、.png、.txt），拒绝所有未在白名单内的扩展名（包括.php、.htaccess、.php5等）。
 验证文件内容：对上传文件进行内容校验（如图片文件检查文件头FFD8FF、89504E47等），避免 “伪装文件”（如包含 PHP 代码的图片马）。
 限制上传目录的 PHP 解析权限：在 Apache 配置中，对上传目录（如/var/www/upload）单独设置禁止 PHP 解析，例如：
