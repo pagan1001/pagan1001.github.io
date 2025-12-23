@@ -26,29 +26,12 @@
         }
 
         /* 基础背景/文字样式 */
-        .bg-dark-900 {
-            background-color: var(--dark-900);
-        }
-
-        .bg-dark-800 {
-            background-color: var(--dark-800);
-        }
-
-        .bg-dark-200 {
-            background-color: var(--dark-200);
-        }
-
-        .bg-dark-100 {
-            background-color: var(--dark-100);
-        }
-
-        .text-accent {
-            color: var(--accent);
-        }
-
-        .border-accent {
-            border-color: var(--accent);
-        }
+        .bg-dark-900 { background-color: var(--dark-900); }
+        .bg-dark-800 { background-color: var(--dark-800); }
+        .bg-dark-200 { background-color: var(--dark-200); }
+        .bg-dark-100 { background-color: var(--dark-100); }
+        .text-accent { color: var(--accent); }
+        .border-accent { border-color: var(--accent); }
 
         /* 按钮样式 */
         .btn-primary {
@@ -57,7 +40,6 @@
             border-radius: 6px;
             transition: all 0.3s;
         }
-
         .btn-primary:hover {
             background-color: #7c3aed;
             transform: translateY(-2px);
@@ -74,17 +56,9 @@
             animation: fadeIn 0.5s ease-in-out forwards;
             opacity: 0;
         }
-
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* 文本截断 */
@@ -103,7 +77,6 @@
             line-height: 1.8;
             color: var(--gray-400);
         }
-
         .article-content h1 {
             font-size: 2rem;
             font-weight: 600;
@@ -112,21 +85,18 @@
             border-bottom: 1px solid var(--dark-100);
             padding-bottom: 0.5rem;
         }
-
         .article-content h2 {
             font-size: 1.5rem;
             font-weight: 600;
             color: white;
             margin: 1.5rem 0 0.8rem;
         }
-
         .article-content h3 {
             font-size: 1.2rem;
             font-weight: 600;
             color: white;
             margin: 1.2rem 0 0.6rem;
         }
-
         .article-content p {
             margin: 0.8rem 0;
             color: var(--gray-400);
@@ -151,8 +121,7 @@
             border: none;
             box-shadow: none;
             line-height: 1.6;
-            padding-left: 4.5rem;
-            /* 为行号预留空间 */
+            padding-left: 4.5rem; /* 为行号预留空间 */
         }
 
         /* 行号样式 */
@@ -182,7 +151,6 @@
             font-size: 0.92rem;
             margin: 0 2px;
         }
-
         .article-content pre code {
             background: transparent;
             padding: 0;
@@ -199,7 +167,6 @@
             border-radius: 8px 8px 0 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .mac-btn {
             width: 12px;
             height: 12px;
@@ -207,23 +174,12 @@
             border: none;
             cursor: default;
         }
-
-        .mac-btn-close {
-            background-color: #f56565;
-        }
-
-        .mac-btn-minimize {
-            background-color: #f6e05e;
-        }
-
-        .mac-btn-maximize {
-            background-color: #48bb78;
-        }
+        .mac-btn-close { background-color: #f56565; }
+        .mac-btn-minimize { background-color: #f6e05e; }
+        .mac-btn-maximize { background-color: #48bb78; }
 
         /* Mac按钮与代码容器衔接 */
-        .mac-buttons+div.code-container {
-            margin-top: 0;
-        }
+        .mac-buttons+div.code-container { margin-top: 0; }
 
         /* 复制按钮样式（含成功/失败状态） */
         .copy-btn {
@@ -243,18 +199,9 @@
             align-items: center;
             gap: 0.3rem;
         }
-
-        .copy-btn:hover {
-            background-color: var(--accent);
-        }
-
-        .copy-btn.copied {
-            background-color: #48bb78;
-        }
-
-        .copy-btn.error {
-            background-color: #f56565;
-        }
+        .copy-btn:hover { background-color: var(--accent); }
+        .copy-btn.copied { background-color: #48bb78; }
+        .copy-btn.error { background-color: #f56565; }
 
         /* 文章内其他元素样式 */
         .article-content img {
@@ -263,7 +210,6 @@
             margin: 1rem 0;
             border: 1px solid var(--dark-100);
         }
-
         .article-content table {
             border-collapse: collapse;
             width: 100%;
@@ -272,19 +218,16 @@
             border-radius: 8px;
             overflow: hidden;
         }
-
         .article-content table th,
         .article-content table td {
             border: 1px solid var(--dark-100);
             padding: 0.8rem;
             color: var(--gray-400);
         }
-
         .article-content table th {
             background: var(--dark-100);
             color: white;
         }
-
         .article-content blockquote {
             border-left: 4px solid var(--accent);
             padding-left: 1rem;
@@ -307,11 +250,9 @@
             </a>
             <div class="hidden md:flex gap-6">
                 <a href="./index.html" class="text-gray-400 hover:text-accent transition-colors">首页</a>
-                <a href="./index.html?category=2025hp"
-                    class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
+                <a href="./index.html?category=2025hp" class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
                 <a href="./index.html?category=yjxy" class="text-gray-400 hover:text-accent transition-colors">应急响应</a>
-                <a href="./index.html?category=middleware"
-                    class="text-gray-400 hover:text-accent transition-colors">中间件</a>
+                <a href="./index.html?category=middleware" class="text-gray-400 hover:text-accent transition-colors">中间件</a>
                 <a href="./index.html?category=POC" class="text-gray-400 hover:text-accent transition-colors">漏洞复现</a>
             </div>
             <button class="md:hidden text-gray-400 hover:text-accent" id="mobileMenuBtn">
@@ -322,11 +263,9 @@
         <div class="md:hidden hidden bg-dark-200 mt-4 p-4 rounded-lg animate-fade-in" id="mobileMenu">
             <div class="flex flex-col gap-3">
                 <a href="./index.html" class="text-gray-400 hover:text-accent transition-colors">首页</a>
-                <a href="./index.html?category=2025hp"
-                    class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
+                <a href="./index.html?category=2025hp" class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
                 <a href="./index.html?category=yjxy" class="text-gray-400 hover:text-accent transition-colors">应急响应</a>
-                <a href="./index.html?category=middleware"
-                    class="text-gray-400 hover:text-accent transition-colors">中间件</a>
+                <a href="./index.html?category=middleware" class="text-gray-400 hover:text-accent transition-colors">中间件</a>
                 <a href="./index.html?category=POC" class="text-gray-400 hover:text-accent transition-colors">漏洞复现</a>
             </div>
         </div>
@@ -497,7 +436,7 @@
             const validLines = codeTrimmed.split('\n').filter(line => line.trim() !== '');
             // 步骤3：如果代码为空，默认显示1行；否则按有效行数生成
             const lineCount = validLines.length === 0 ? 1 : validLines.length;
-
+            
             let lineNumbers = '';
             for (let i = 1; i <= lineCount; i++) {
                 lineNumbers += `<div class="line-number">${i}</div>`;
@@ -546,26 +485,26 @@
                     // 获取代码内容（清理末尾多余换行）
                     const codeElement = pre.querySelector('code');
                     let code = codeElement ? codeElement.textContent.trimEnd() : '';
-
+                    
                     // 1. 创建代码容器
                     const codeContainer = document.createElement('div');
                     codeContainer.className = 'code-container';
-
+                    
                     // 2. 创建行号元素
                     const lineNumbers = document.createElement('div');
                     lineNumbers.className = 'line-numbers';
                     lineNumbers.innerHTML = generateLineNumbers(code);
-
+                    
                     // 3. 创建复制按钮（修复图标问题）
                     const copyBtn = document.createElement('button');
                     copyBtn.className = 'copy-btn';
                     copyBtn.innerHTML = '<i class="fa fa-copy"></i> 复制';
-
+                    
                     // 4. 复制按钮点击逻辑
                     copyBtn.addEventListener('click', () => {
                         // 清空原有状态
                         copyBtn.classList.remove('copied', 'error');
-
+                        
                         // 复制到剪贴板
                         navigator.clipboard.writeText(code).then(() => {
                             // 复制成功
@@ -588,28 +527,28 @@
                             }, 2000);
                         });
                     });
-
+                    
                     // 5. 创建Mac风格顶部按钮
                     const macButtons = document.createElement('div');
                     macButtons.className = 'mac-buttons';
-
+                    
                     const closeBtn = document.createElement('button');
                     closeBtn.className = 'mac-btn mac-btn-close';
                     closeBtn.setAttribute('aria-label', '关闭');
-
+                    
                     const minimizeBtn = document.createElement('button');
                     minimizeBtn.className = 'mac-btn mac-btn-minimize';
                     minimizeBtn.setAttribute('aria-label', '最小化');
-
+                    
                     const maximizeBtn = document.createElement('button');
                     maximizeBtn.className = 'mac-btn mac-btn-maximize';
                     maximizeBtn.setAttribute('aria-label', '最大化');
-
+                    
                     // 组装Mac按钮
                     macButtons.appendChild(closeBtn);
                     macButtons.appendChild(minimizeBtn);
                     macButtons.appendChild(maximizeBtn);
-
+                    
                     // 6. 重组代码块DOM结构
                     pre.parentNode.insertBefore(macButtons, pre);
                     pre.parentNode.insertBefore(codeContainer, pre);
@@ -633,7 +572,7 @@
             })
             .catch(error => {
                 // 加载失败提示
-                document.getElementById('articleContent').innerHTML =
+                document.getElementById('articleContent').innerHTML = 
                     `<p class="text-red-500 text-center">❌ 文章加载失败：${error.message}<br>请求路径：./MD/${category}/${mdFileName}.md</p>`;
             });
 
