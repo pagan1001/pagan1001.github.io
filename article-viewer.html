@@ -7,7 +7,10 @@
     <link rel="icon" href="./icons/favicon.ico" type="image/x-icon">
     <title>文章详情 | 我的博客</title>
 
+    <!-- 核心样式依赖 -->
     <link rel="stylesheet" href="./assets/css/tailwindcss.min.css">
+    <!-- Font Awesome CDN兜底 + 本地文件，确保图标正常 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./assets/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/atom-one-dark.min.css">
 
@@ -22,6 +25,7 @@
             --gray-500: #6b7280;
         }
 
+        /* 基础背景/文字样式 */
         .bg-dark-900 {
             background-color: var(--dark-900);
         }
@@ -46,6 +50,7 @@
             border-color: var(--accent);
         }
 
+        /* 按钮样式 */
         .btn-primary {
             background-color: var(--accent);
             color: white;
@@ -58,11 +63,13 @@
             transform: translateY(-2px);
         }
 
+        /* 卡片悬浮效果 */
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.2);
         }
 
+        /* 淡入动画 */
         .animate-fade-in {
             animation: fadeIn 0.5s ease-in-out forwards;
             opacity: 0;
@@ -80,6 +87,7 @@
             }
         }
 
+        /* 文本截断 */
         .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -87,6 +95,7 @@
             overflow: hidden;
         }
 
+        /* 文章内容主体样式 */
         .article-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -123,13 +132,14 @@
             color: var(--gray-400);
         }
 
-        /* 统一为Mac风格代码块样式 */
+        /* 代码块容器（核心：行号+复制按钮+代码的父容器） */
         .code-container {
             position: relative;
             border-radius: 0 0 8px 8px;
             overflow: hidden;
         }
 
+        /* 代码块基础样式 */
         .article-content pre {
             background-color: #1a202c;
             color: #e2e8f0;
@@ -142,7 +152,7 @@
             box-shadow: none;
             line-height: 1.6;
             padding-left: 4.5rem;
-            /* 为行号留出空间 */
+            /* 为行号预留空间 */
         }
 
         /* 行号样式 */
@@ -164,7 +174,7 @@
             overflow: hidden;
         }
 
-        /* 优化单行代码样式 */
+        /* 单行代码样式 */
         .article-content code {
             background: rgba(45, 45, 45, 0.5);
             padding: 0.25rem 0.5rem;
@@ -180,7 +190,7 @@
             font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
         }
 
-        /* Mac风格按钮样式 */
+        /* Mac风格顶部按钮 */
         .mac-buttons {
             display: flex;
             gap: 8px;
@@ -210,12 +220,12 @@
             background-color: #48bb78;
         }
 
-        /* 修复Mac按钮与代码块的衔接 */
+        /* Mac按钮与代码容器衔接 */
         .mac-buttons+div.code-container {
             margin-top: 0;
         }
 
-        /* 复制按钮样式（优化） */
+        /* 复制按钮样式（含成功/失败状态） */
         .copy-btn {
             position: absolute;
             top: 0.75rem;
@@ -246,6 +256,7 @@
             background-color: #f56565;
         }
 
+        /* 文章内其他元素样式 */
         .article-content img {
             max-width: 100%;
             border-radius: 8px;
@@ -263,7 +274,7 @@
         }
 
         .article-content table th,
-        td {
+        .article-content table td {
             border: 1px solid var(--dark-100);
             padding: 0.8rem;
             color: var(--gray-400);
@@ -287,10 +298,11 @@
 </head>
 
 <body class="bg-dark-900 text-white min-h-screen">
+    <!-- 导航栏 -->
     <nav class="bg-dark-800 py-4 px-6 sticky top-0 z-50 animate-fade-in">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="./index.html" class="text-xl font-bold text-accent">
-                <i class="fa-solid fa-feather-pointed text-accent animate-pulse-light"></i>
+                <i class="fa fa-feather-pointed text-accent"></i>
                 Pagan's Blog
             </a>
             <div class="hidden md:flex gap-6">
@@ -303,9 +315,10 @@
                 <a href="./index.html?category=POC" class="text-gray-400 hover:text-accent transition-colors">漏洞复现</a>
             </div>
             <button class="md:hidden text-gray-400 hover:text-accent" id="mobileMenuBtn">
-                <i class="fa-solid fa-bars text-xl"></i>
+                <i class="fa fa-bars text-xl"></i>
             </button>
         </div>
+        <!-- 移动端菜单 -->
         <div class="md:hidden hidden bg-dark-200 mt-4 p-4 rounded-lg animate-fade-in" id="mobileMenu">
             <div class="flex flex-col gap-3">
                 <a href="./index.html" class="text-gray-400 hover:text-accent transition-colors">首页</a>
@@ -319,26 +332,31 @@
         </div>
     </nav>
 
+    <!-- 主内容区 -->
     <main class="py-10 animate-fade-in">
+        <!-- 文章元信息 -->
         <div class="max-w-7xl mx-auto px-6 mb-8">
             <h1 id="articleTitle" class="text-3xl font-bold text-white mb-4"></h1>
             <div id="articleMeta" class="flex flex-wrap gap-4 text-gray-500 text-sm">
-                <span><i class="fa-solid fa-calendar mr-1"></i> <span id="publishDate"></span></span>
-                <span><i class="fa-solid fa-tag mr-1"></i> <span id="articleTag"></span></span>
-                <span><i class="fa-solid fa-eye mr-1"></i> <span id="viewCount"></span></span>
-                <span><i class="fa-solid fa-clock mr-1"></i> <span id="readTime"></span></span>
+                <span><i class="fa fa-calendar mr-1"></i> <span id="publishDate"></span></span>
+                <span><i class="fa fa-tag mr-1"></i> <span id="articleTag"></span></span>
+                <span><i class="fa fa-eye mr-1"></i> <span id="viewCount"></span></span>
+                <span><i class="fa fa-clock mr-1"></i> <span id="readTime"></span></span>
             </div>
         </div>
 
+        <!-- 文章内容 -->
         <div id="articleContent" class="article-content"></div>
 
+        <!-- 回到顶部按钮 -->
         <div class="max-w-7xl mx-auto px-6 mt-10 text-center">
             <a href="#" class="btn-primary py-2 px-6 inline-block">
-                <i class="fa-solid fa-arrow-up mr-1"></i> 回到顶部
+                <i class="fa fa-arrow-up mr-1"></i> 回到顶部
             </a>
         </div>
     </main>
 
+    <!-- 页脚 -->
     <footer class="bg-dark-800 py-6 mt-10 animate-fade-in">
         <div class="max-w-7xl mx-auto px-6 text-center text-gray-500">
             <p>Copyright © 2025 Pagan's Blog. All rights reserved | 基于 Markdown 构建</p>
@@ -350,13 +368,15 @@
         </div>
     </footer>
 
+    <!-- 脚本依赖 -->
     <script src="./assets/js/showdown.min.js"></script>
     <script src="./assets/js/highlight.min.js"></script>
     <script src="./assets/js/javascript.min.js"></script>
     <script src="./assets/js/css.min.js"></script>
     <script src="./assets/js/typescript.min.js"></script>
+
     <script>
-        // 移动端菜单逻辑
+        // ========== 移动端菜单逻辑 ==========
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         if (mobileMenuBtn) {
@@ -365,7 +385,7 @@
             });
         }
 
-        // MD 解析核心逻辑
+        // ========== URL参数解析 ==========
         const params = new URLSearchParams(window.location.search);
         const category = params.get('category') || '';
         const mdFileName = params.get('name');
@@ -374,7 +394,7 @@
             document.getElementById('articleContent').innerHTML = '<p class="text-red-500 text-center">❌ 未找到文章，请返回首页！</p>';
         }
 
-        // 文章元信息配置
+        // ========== 文章元信息配置 ==========
         const articleMetaConfig = {
             'Spring_Cloud_Gateway_远程命令执行漏洞': {
                 title: 'Spring Cloud Gateway 远程命令执行漏洞',
@@ -469,24 +489,30 @@
             }
         };
 
-        // 生成行号
+        // ========== 精准生成行号（修复多余换行问题） ==========
         function generateLineNumbers(code) {
-            const lines = code.split('\n').length;
+            // 步骤1：去除代码末尾的所有多余换行（保留开头缩进）
+            const codeTrimmed = code.trimEnd();
+            // 步骤2：按换行分割，过滤纯空行（避免空行算行数）
+            const validLines = codeTrimmed.split('\n').filter(line => line.trim() !== '');
+            // 步骤3：如果代码为空，默认显示1行；否则按有效行数生成
+            const lineCount = validLines.length === 0 ? 1 : validLines.length;
+
             let lineNumbers = '';
-            for (let i = 1; i <= lines; i++) {
+            for (let i = 1; i <= lineCount; i++) {
                 lineNumbers += `<div class="line-number">${i}</div>`;
             }
             return lineNumbers;
         }
 
-        // 加载并渲染MD文件
+        // ========== 加载并渲染Markdown文件 ==========
         fetch(`./MD/${category}/${mdFileName}.md`)
             .then(response => {
                 if (!response.ok) throw new Error('文件不存在');
                 return response.text();
             })
             .then(mdText => {
-                // 填充元信息
+                // 填充文章元信息
                 const meta = articleMetaConfig[mdFileName] || {
                     title: mdFileName,
                     date: '未知',
@@ -500,7 +526,7 @@
                 document.getElementById('viewCount').textContent = meta.viewCount;
                 document.getElementById('readTime').textContent = meta.readTime;
 
-                // MD转HTML（替换&nbsp;为普通空格，解决编码问题）
+                // Markdown转HTML（修复&nbsp;编码问题）
                 const converter = new showdown.Converter({
                     tables: true,
                     tasklists: true,
@@ -510,48 +536,52 @@
                     underline: true
                 });
                 let html = converter.makeHtml(mdText);
-                html = html.replace(/&nbsp;/g, ' '); // 关键：替换所有非断空格为普通空格
+                html = html.replace(/&nbsp;/g, ' '); // 替换所有非断空格为普通空格
+
+                // 渲染HTML到页面
                 document.getElementById('articleContent').innerHTML = html;
 
-                // 处理代码块，添加行号和复制按钮
+                // ========== 处理所有代码块：添加行号+复制按钮 ==========
                 document.querySelectorAll('.article-content pre').forEach(pre => {
-                    // 获取代码内容
+                    // 获取代码内容（清理末尾多余换行）
                     const codeElement = pre.querySelector('code');
-                    const code = codeElement ? codeElement.textContent : '';
+                    let code = codeElement ? codeElement.textContent.trimEnd() : '';
 
-                    // 创建代码容器
+                    // 1. 创建代码容器
                     const codeContainer = document.createElement('div');
                     codeContainer.className = 'code-container';
 
-                    // 创建行号元素
+                    // 2. 创建行号元素
                     const lineNumbers = document.createElement('div');
                     lineNumbers.className = 'line-numbers';
                     lineNumbers.innerHTML = generateLineNumbers(code);
 
-                    // 创建复制按钮（核心修复：替换为存在的Solid风格图标）
+                    // 3. 创建复制按钮（修复图标问题）
                     const copyBtn = document.createElement('button');
                     copyBtn.className = 'copy-btn';
-                    // 改用fa-solid（实心）图标，避免regular版本缺失问题
                     copyBtn.innerHTML = '<i class="fa fa-copy"></i> 复制';
 
-                    // 实现复制功能（优化状态反馈）
+                    // 4. 复制按钮点击逻辑
                     copyBtn.addEventListener('click', () => {
-                        // 清空原有状态类
+                        // 清空原有状态
                         copyBtn.classList.remove('copied', 'error');
+
                         // 复制到剪贴板
                         navigator.clipboard.writeText(code).then(() => {
+                            // 复制成功
                             copyBtn.innerHTML = '<i class="fa fa-check"></i> 已复制';
                             copyBtn.classList.add('copied');
-                            // 2秒后恢复原状
+                            // 2秒后恢复
                             setTimeout(() => {
                                 copyBtn.innerHTML = '<i class="fa fa-copy"></i> 复制';
                                 copyBtn.classList.remove('copied');
                             }, 2000);
                         }).catch(err => {
+                            // 复制失败
                             console.error('复制失败:', err);
                             copyBtn.innerHTML = '<i class="fa fa-times"></i> 失败';
                             copyBtn.classList.add('error');
-                            // 2秒后恢复原状
+                            // 2秒后恢复
                             setTimeout(() => {
                                 copyBtn.innerHTML = '<i class="fa fa-copy"></i> 复制';
                                 copyBtn.classList.remove('error');
@@ -559,13 +589,7 @@
                         });
                     });
 
-                    // 重组代码块结构
-                    pre.parentNode.insertBefore(codeContainer, pre);
-                    codeContainer.appendChild(lineNumbers);
-                    codeContainer.appendChild(pre);
-                    codeContainer.appendChild(copyBtn);
-
-                    // 移动mac按钮到容器前
+                    // 5. 创建Mac风格顶部按钮
                     const macButtons = document.createElement('div');
                     macButtons.className = 'mac-buttons';
 
@@ -581,19 +605,26 @@
                     maximizeBtn.className = 'mac-btn mac-btn-maximize';
                     maximizeBtn.setAttribute('aria-label', '最大化');
 
+                    // 组装Mac按钮
                     macButtons.appendChild(closeBtn);
                     macButtons.appendChild(minimizeBtn);
                     macButtons.appendChild(maximizeBtn);
 
-                    codeContainer.parentNode.insertBefore(macButtons, codeContainer);
+                    // 6. 重组代码块DOM结构
+                    pre.parentNode.insertBefore(macButtons, pre);
+                    pre.parentNode.insertBefore(codeContainer, pre);
+                    codeContainer.appendChild(lineNumbers);
+                    codeContainer.appendChild(pre);
+                    codeContainer.appendChild(copyBtn);
                 });
 
-                // 代码高亮
+                // ========== 代码高亮 ==========
                 hljs.configure({
                     ignoreUnescapedHTML: true,
-                    languages: ['javascript', 'css', 'typescript', 'html', 'shell', 'sql', 'java', 'python']
+                    languages: ['javascript', 'css', 'typescript', 'html', 'shell', 'sql', 'java', 'python', 'bash']
                 });
                 document.querySelectorAll('pre code').forEach((block) => {
+                    // 兼容JSX/React代码高亮
                     if (block.className.includes('jsx') || block.className.includes('react')) {
                         block.className = 'language-javascript';
                     }
@@ -601,10 +632,12 @@
                 });
             })
             .catch(error => {
-                document.getElementById('articleContent').innerHTML = `<p class="text-red-500">加载失败：${error.message}，路径：./MD/${category}/${mdFileName}.md</p>`;
+                // 加载失败提示
+                document.getElementById('articleContent').innerHTML =
+                    `<p class="text-red-500 text-center">❌ 文章加载失败：${error.message}<br>请求路径：./MD/${category}/${mdFileName}.md</p>`;
             });
 
-        // 回到顶部逻辑
+        // ========== 回到顶部逻辑 ==========
         document.querySelector('a[href="#"]').addEventListener('click', (e) => {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
