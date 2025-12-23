@@ -123,7 +123,13 @@
             color: var(--gray-400);
         }
 
-        /* 统一为Mac风格代码块样式（与1.html保持一致） */
+        /* 统一为Mac风格代码块样式 */
+        .code-container {
+            position: relative;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+
         .article-content pre {
             background-color: #1a202c;
             color: #e2e8f0;
@@ -135,9 +141,30 @@
             border: none;
             box-shadow: none;
             line-height: 1.6;
+            padding-left: 4.5rem;
+            /* 为行号留出空间 */
         }
 
-        /* 优化单行代码样式（与代码块区分） */
+        /* 行号样式 */
+        .line-numbers {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4rem;
+            background-color: #1a202c;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 0.75rem;
+            text-align: right;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: #6b7280;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        /* 优化单行代码样式 */
         .article-content code {
             background: rgba(45, 45, 45, 0.5);
             padding: 0.25rem 0.5rem;
@@ -153,7 +180,7 @@
             font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
         }
 
-        /* Mac风格按钮样式（与1.html完全一致） */
+        /* Mac风格按钮样式 */
         .mac-buttons {
             display: flex;
             gap: 8px;
@@ -184,8 +211,35 @@
         }
 
         /* 修复Mac按钮与代码块的衔接 */
-        .mac-buttons+pre {
+        .mac-buttons+div.code-container {
             margin-top: 0;
+        }
+
+        /* 复制按钮样式 */
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background-color: rgba(45, 45, 45, 0.8);
+            color: #e2e8f0;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--accent);
+        }
+
+        .copy-btn.copied {
+            background-color: #48bb78;
         }
 
         .article-content img {
@@ -237,9 +291,11 @@
             </a>
             <div class="hidden md:flex gap-6">
                 <a href="./index.html" class="text-gray-400 hover:text-accent transition-colors">首页</a>
-                <a href="./index.html?category=2025hp" class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
+                <a href="./index.html?category=2025hp"
+                    class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
                 <a href="./index.html?category=yjxy" class="text-gray-400 hover:text-accent transition-colors">应急响应</a>
-                <a href="./index.html?category=middleware" class="text-gray-400 hover:text-accent transition-colors">中间件</a>
+                <a href="./index.html?category=middleware"
+                    class="text-gray-400 hover:text-accent transition-colors">中间件</a>
                 <a href="./index.html?category=POC" class="text-gray-400 hover:text-accent transition-colors">漏洞复现</a>
             </div>
             <button class="md:hidden text-gray-400 hover:text-accent" id="mobileMenuBtn">
@@ -249,9 +305,11 @@
         <div class="md:hidden hidden bg-dark-200 mt-4 p-4 rounded-lg animate-fade-in" id="mobileMenu">
             <div class="flex flex-col gap-3">
                 <a href="./index.html" class="text-gray-400 hover:text-accent transition-colors">首页</a>
-                <a href="./index.html?category=2025hp" class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
+                <a href="./index.html?category=2025hp"
+                    class="text-gray-400 hover:text-accent transition-colors">2025黄浦区攻防演练</a>
                 <a href="./index.html?category=yjxy" class="text-gray-400 hover:text-accent transition-colors">应急响应</a>
-                <a href="./index.html?category=middleware" class="text-gray-400 hover:text-accent transition-colors">中间件</a>
+                <a href="./index.html?category=middleware"
+                    class="text-gray-400 hover:text-accent transition-colors">中间件</a>
                 <a href="./index.html?category=POC" class="text-gray-400 hover:text-accent transition-colors">漏洞复现</a>
             </div>
         </div>
@@ -407,6 +465,16 @@
             }
         };
 
+        // 生成行号
+        function generateLineNumbers(code) {
+            const lines = code.split('\n').length;
+            let lineNumbers = '';
+            for (let i = 1; i <= lines; i++) {
+                lineNumbers += `<div class="line-number">${i}</div>`;
+            }
+            return lineNumbers;
+        }
+
         // 加载并渲染MD文件
         fetch(`./MD/${category}/${mdFileName}.md`)
             .then(response => {
@@ -440,13 +508,57 @@
                 const html = converter.makeHtml(mdText);
                 document.getElementById('articleContent').innerHTML = html;
 
-                // 添加Mac风格按钮
+                // 处理代码块，添加行号和复制按钮
                 document.querySelectorAll('.article-content pre').forEach(pre => {
-                    // 创建按钮容器
+                    // 获取代码内容
+                    const codeElement = pre.querySelector('code');
+                    const code = codeElement ? codeElement.textContent : '';
+
+                    // 创建代码容器
+                    const codeContainer = document.createElement('div');
+                    codeContainer.className = 'code-container';
+
+                    // 创建行号元素
+                    const lineNumbers = document.createElement('div');
+                    lineNumbers.className = 'line-numbers';
+                    lineNumbers.innerHTML = generateLineNumbers(code);
+
+                    // 创建复制按钮
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-btn';
+                    copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> 复制';
+
+                    // 实现复制功能
+                    copyBtn.addEventListener('click', () => {
+                        navigator.clipboard.writeText(code).then(() => {
+                            copyBtn.innerHTML = '<i class="fa-regular fa-check"></i> 已复制';
+                            copyBtn.classList.add('copied');
+
+                            // 2秒后恢复原状
+                            setTimeout(() => {
+                                copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> 复制';
+                                copyBtn.classList.remove('copied');
+                            }, 2000);
+                        }).catch(err => {
+                            console.error('复制失败:', err);
+                            copyBtn.innerHTML = '<i class="fa-regular fa-times"></i> 失败';
+
+                            setTimeout(() => {
+                                copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> 复制';
+                            }, 2000);
+                        });
+                    });
+
+                    // 重组代码块结构
+                    pre.parentNode.insertBefore(codeContainer, pre);
+                    codeContainer.appendChild(lineNumbers);
+                    codeContainer.appendChild(pre);
+                    codeContainer.appendChild(copyBtn);
+
+                    // 移动mac按钮到容器前
                     const macButtons = document.createElement('div');
                     macButtons.className = 'mac-buttons';
 
-                    // 创建三个按钮
                     const closeBtn = document.createElement('button');
                     closeBtn.className = 'mac-btn mac-btn-close';
                     closeBtn.setAttribute('aria-label', '关闭');
@@ -459,13 +571,11 @@
                     maximizeBtn.className = 'mac-btn mac-btn-maximize';
                     maximizeBtn.setAttribute('aria-label', '最大化');
 
-                    // 组装按钮容器
                     macButtons.appendChild(closeBtn);
                     macButtons.appendChild(minimizeBtn);
                     macButtons.appendChild(maximizeBtn);
 
-                    // 将按钮容器插入到 pre 标签前面
-                    pre.parentNode.insertBefore(macButtons, pre);
+                    codeContainer.parentNode.insertBefore(macButtons, codeContainer);
                 });
 
                 // 代码高亮
@@ -491,5 +601,4 @@
         });
     </script>
 </body>
-
 </html>
