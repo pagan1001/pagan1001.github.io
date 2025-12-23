@@ -8,6 +8,8 @@
     <title>文章详情 | 我的博客</title>
 
     <link rel="stylesheet" href="./assets/css/tailwindcss.min.css">
+    <!-- 确保引入完整的Font Awesome（优先用CDN兜底，避免本地文件缺失） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./assets/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/atom-one-dark.min.css">
 
@@ -215,7 +217,7 @@
             margin-top: 0;
         }
 
-        /* 复制按钮样式 */
+        /* 复制按钮样式（优化） */
         .copy-btn {
             position: absolute;
             top: 0.75rem;
@@ -224,14 +226,14 @@
             color: #e2e8f0;
             border: none;
             border-radius: 4px;
-            padding: 0.25rem 0.5rem;
+            padding: 0.4rem 0.6rem;
             font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.2s;
             z-index: 10;
             display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.3rem;
         }
 
         .copy-btn:hover {
@@ -240,6 +242,10 @@
 
         .copy-btn.copied {
             background-color: #48bb78;
+        }
+
+        .copy-btn.error {
+            background-color: #f56565;
         }
 
         .article-content img {
@@ -496,7 +502,7 @@
                 document.getElementById('viewCount').textContent = meta.viewCount;
                 document.getElementById('readTime').textContent = meta.readTime;
 
-                // MD转HTML
+                // MD转HTML（替换&nbsp;为普通空格，解决编码问题）
                 const converter = new showdown.Converter({
                     tables: true,
                     tasklists: true,
@@ -505,7 +511,8 @@
                     strikethrough: true,
                     underline: true
                 });
-                const html = converter.makeHtml(mdText);
+                let html = converter.makeHtml(mdText);
+                html = html.replace(/&nbsp;/g, ' '); // 关键：替换所有非断空格为普通空格
                 document.getElementById('articleContent').innerHTML = html;
 
                 // 处理代码块，添加行号和复制按钮
@@ -523,28 +530,33 @@
                     lineNumbers.className = 'line-numbers';
                     lineNumbers.innerHTML = generateLineNumbers(code);
 
-                    // 创建复制按钮
+                    // 创建复制按钮（核心修复：替换为存在的Solid风格图标）
                     const copyBtn = document.createElement('button');
                     copyBtn.className = 'copy-btn';
-                    copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> 复制';
+                    // 改用fa-solid（实心）图标，避免regular版本缺失问题
+                    copyBtn.innerHTML = '<i class="fa fa-copy"></i> 复制';
 
-                    // 实现复制功能
+                    // 实现复制功能（优化状态反馈）
                     copyBtn.addEventListener('click', () => {
+                        // 清空原有状态类
+                        copyBtn.classList.remove('copied', 'error');
+                        // 复制到剪贴板
                         navigator.clipboard.writeText(code).then(() => {
-                            copyBtn.innerHTML = '<i class="fa-regular fa-check"></i> 已复制';
+                            copyBtn.innerHTML = '<i class="fa fa-check"></i> 已复制';
                             copyBtn.classList.add('copied');
-
                             // 2秒后恢复原状
                             setTimeout(() => {
-                                copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> 复制';
+                                copyBtn.innerHTML = '<i class="fa fa-copy"></i> 复制';
                                 copyBtn.classList.remove('copied');
                             }, 2000);
                         }).catch(err => {
                             console.error('复制失败:', err);
-                            copyBtn.innerHTML = '<i class="fa-regular fa-times"></i> 失败';
-
+                            copyBtn.innerHTML = '<i class="fa fa-times"></i> 失败';
+                            copyBtn.classList.add('error');
+                            // 2秒后恢复原状
                             setTimeout(() => {
-                                copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> 复制';
+                                copyBtn.innerHTML = '<i class="fa fa-copy"></i> 复制';
+                                copyBtn.classList.remove('error');
                             }, 2000);
                         });
                     });
@@ -581,7 +593,7 @@
                 // 代码高亮
                 hljs.configure({
                     ignoreUnescapedHTML: true,
-                    languages: ['javascript', 'css', 'typescript', 'html']
+                    languages: ['javascript', 'css', 'typescript', 'html', 'shell', 'sql', 'java', 'python']
                 });
                 document.querySelectorAll('pre code').forEach((block) => {
                     if (block.className.includes('jsx') || block.className.includes('react')) {
