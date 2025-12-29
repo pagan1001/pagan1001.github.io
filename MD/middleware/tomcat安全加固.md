@@ -79,7 +79,7 @@ maxParameterCount 最大并发连接数<br>
 ## HSTS配置
 在web.xml底部web-app标签内添加filter标签内容
 ```xml
-<filter>
+    <filter>
     <filter-name>httpHeaderSecurity</filter-name>
     <filter-class>org.apache.catalina.filters.HttpHeaderSecurityFilter</filter-class>
     <!-- 启用HSTS，有效期31536000秒（1年） -->
