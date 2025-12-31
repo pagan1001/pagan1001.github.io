@@ -98,7 +98,7 @@ Connection: keep-alive
 </filter-mapping>
 ```
 **修复的原理其实也很简单，就像前面在漏洞原理里面讲到的：**
->请求 → FQDNFilter (匹配/*) → ManagerOneYearCache (匹配*.js) → BuildNumFilter (匹配/3370/*) → 目标资源<br
+>请求 → FQDNFilter (匹配/*) → ManagerOneYearCache (匹配*.js) → BuildNumFilter (匹配/3370/*) → 目标资源<br>
 
 修改后校验路径为/3370/js等下一级路径，那么匹配/3370/*就会失效，自然就无法读取web.xml文件,因为其他文件本就无法读取，所以只需要让攻击者无法拼接web.xml路径就可以了。
 
