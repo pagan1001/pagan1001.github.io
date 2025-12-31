@@ -18,7 +18,7 @@
 
 **由于路径中包含了 /js/，它被识别为一个JS资源请求，因此顺利通过了 ManagerOneYearCache 过滤器。之后，因为其路径匹配 /3370/*，才得以进入存在缺陷的 BuildNumFilter，并触发路径遍历漏洞。**<br>
 
-![](ArcGIS Server Manager网站配置文件泄露漏洞photo/image2.png)
+![](/MD/POC/ArcGIS_Server_Manager网站配置文件泄露漏洞photos/image2.png)
 
 ### 3、为什么其他目录不行：
 **像 /images/ 或 /proxy/ 等目录下的请求，因为没有配置其他必须经过的过滤器，它们可能在更早的容器层面就被以不同的方式处理或拒绝，导致无法“触发”到 BuildNumFilter 中那段有问题的路径处理逻辑。<br>**
