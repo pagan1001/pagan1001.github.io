@@ -114,5 +114,6 @@ Connection: keep-alive
 >- 请求：/arcgis/manager/3370/js/../../../../etc/passwd
 >- 请求：/arcgis/manager/3370/js/../../../../../../../../../../C:/Windows/System32/drivers/etc/hosts 
 >- 预期结果：404。证明漏洞的路径遍历能力被限制在该Web应用目录内，无法逃逸至服务器文件系统。
+
 ## AI总结
 **简单来说，这不是一个通用的任意文件读取漏洞。它是一个在特定过滤器中对特定路径（/WEB-INF/web.xml）处理不当导致的“信息泄露”。漏洞的威力被严格限制在Java容器的安全沙箱内，而 web.xml 成为了这个沙箱因设计巧合而产生的一道裂缝。**
