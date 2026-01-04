@@ -126,7 +126,7 @@ nmap --script ssl-enum-ciphers -p 10130 127.0.0.1
 ![](/MD/middleware/tomcat_photos/image11.png)
 
 ## 去除错误界面的版本信息
-在web.xml底部Host标签内增加
+在servers.xml底部Host标签内增加
 ```xml
 <!-- 去除错误界面的版本信息 -->
     <Valve className="org.apache.catalina.valves.ErrorReportValve"
